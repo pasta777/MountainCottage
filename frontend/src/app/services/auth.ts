@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -12,5 +12,19 @@ export class Auth {
 
   register(formData: FormData): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/register`, formData);
+  }
+
+  adminLogin(credentials: FormData): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/admin/login`, credentials).pipe(
+      tap(response => {
+        if(response && response.token) {
+          localStorage.setItem('admin_token', response.token);
+        }
+      })
+    );
+  }
+
+  getAdminToken(): string | null {
+    return localStorage.getItem('admin_token');
   }
 }

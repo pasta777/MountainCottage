@@ -1,0 +1,31 @@
+<div class="dashboard-container">
+    <h2>New Requests for Registration</h2>
+
+    <div *ngIf="requests.length === 0">
+        <p>There are no requests at the moment.</p>
+    </div>
+
+    <table *ngIf="requests.length > 0">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Username</th>
+                <th>Email</th>
+                <th>User Type</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let req of requests">
+                <td>{{ req.name }} {{ req.surname }}</td>
+                <td>{{ req.username }}</td>
+                <td>{{ req.email }}</td>
+                <td>{{ req.userType }}</td>
+                <td>
+                    <button class="approve-btn" (click)="onApprove(req._id)">Approve</button>
+                    <button class="reject-btn" (click)="onReject(req._id)">Reject</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
