@@ -6,6 +6,7 @@ import bcrypt from 'bcrypt'
 import multer from 'multer'
 import path from "path";
 import fs from 'fs';
+import jwt from 'jsonwebtoken'
 
 const mongoURI = 'mongodb://localhost:27017/mountain_cottage';
 mongoose.connect(mongoURI)
@@ -43,6 +44,11 @@ app.get('/api/test', (req: Request, res: Response) => {
     res.json({message: 'Pozzz'});
 });
 
+app.get('/api/admin/registration-requests', async (_req: Request, res: Response) => {
+    const requests = await User.find({status: 'awaiting_approval'});
+    res.status(200).json(requests);
+});
+
 app.post('/api/auth/register', upload.single('profilePicture'), async (req: Request, res: Response) => {
     try {
         const {
@@ -51,7 +57,7 @@ app.post('/api/auth/register', upload.single('profilePicture'), async (req: Requ
 
         const existingUser = await User.findOne({$or: [{username}, {email}]});
         if(existingUser) {
-            return res.status(409).json({message: 'Username or email already exist.'});
+            return res.status(409).json({message: "Username or email already exist."});
         }
 
         const hashedPassword = await bcrypt.hash(password, 10);
@@ -77,6 +83,46 @@ app.post('/api/auth/register', upload.single('profilePicture'), async (req: Requ
         console.error('Registration error: ', error);
         res.status(500).json({message: "Server error."});
     }
+});
+
+app.post('/api/auth/admin/login', async (req: Request, res: Response) => {
+    const { username, password } = req.body;
+
+    const admin = await User.findOne({ username: username, userType: 'administrator' });
+    if(!admin) {
+        return res.status(401).json({message: "Incorrect credentials"});
+    }
+
+    const isPasswordCorrect = await bcrypt.compare(password, admin.password);
+    if(!isPasswordCorrect) {
+        return res.status(401).json({message: "Incorrect credentials"});
+    }
+
+    const token = jwt.sign(
+        {id: admin._id, username: admin.username, userType: admin.userType},
+        'SUPER_SECRET_KEY',
+        {expiresIn: '3h'}
+    );
+
+    res.status(200).json({token: token});
+});
+
+app.post('/api/admin/approve-request/:userId', async (req: Request, res: Response) => {
+    const user = await User.findByIdAndUpdate(req.params.userId, {status: 'active'}, {new: true});
+    if(!user) {
+        return res.status(404).json({message: "User not found."});
+    }
+
+    res.status(200).json({message: "The user is approved"});
+});
+
+app.post('/api/admin/reject-request/:userId', async (req: Request, res: Response) => {
+    const user = await User.findByIdAndDelete(req.params.userId);
+    if(!user) {
+        return res.status(404).json({message: "User not found"});
+    }
+
+    res.status(200).json({message: "The user is rejected"});
 });
 
 app.listen(port, () => {
