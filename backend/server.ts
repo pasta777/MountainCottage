@@ -7,6 +7,7 @@ import multer from 'multer'
 import path from "path";
 import fs from 'fs';
 import jwt from 'jsonwebtoken'
+import { checkAuth } from "./src/middleware/auth.middleware";
 
 const mongoURI = 'mongodb://localhost:27017/mountain_cottage';
 mongoose.connect(mongoURI)
@@ -47,6 +48,41 @@ app.get('/api/test', (req: Request, res: Response) => {
 app.get('/api/admin/registration-requests', async (_req: Request, res: Response) => {
     const requests = await User.find({status: 'awaiting_approval'});
     res.status(200).json(requests);
+});
+
+app.get('/api/users/profile', checkAuth, async (req: any, res: Response) => {
+    const user = await User.findById(req.userData.id).select('-password');
+    if(!user) {
+        return res.status(404).json({message: "User not found."});
+    }
+    res.status(200).json(user);
+});
+
+app.put('/api/users/profile', checkAuth, async (req: any, res: Response) => {
+    const updatedUser = await User.findByIdAndUpdate(req.userData.id, req.body, {new: true});
+    res.status(200).json(updatedUser);
+});
+
+app.post('/api/auth/change-password', checkAuth, async (req: any, res: Response) => {
+    const {oldPassword, newPassword} = req.body;
+
+    const user = await User.findById(req.userData.id);
+    if(!user) {
+        return res.status(404).json({message: "User not found."});
+    }
+
+    const isPasswordCorrect = await bcrypt.compare(oldPassword, user.password);
+    if(!isPasswordCorrect) {
+        return res.status(401).json({message: "Old password isn't correct"});
+    }
+
+    // TODO: Dodati validaciju nove lozinke (regex)
+
+    const hashedNewPassword = await bcrypt.hash(newPassword, 10);
+    user.password = hashedNewPassword;
+    await user.save();
+
+    res.status(200).json({message: "The password is changed successfully."});
 });
 
 app.post('/api/auth/register', upload.single('profilePicture'), async (req: Request, res: Response) => {
@@ -123,6 +159,36 @@ app.post('/api/admin/reject-request/:userId', async (req: Request, res: Response
     }
 
     res.status(200).json({message: "The user is rejected"});
+});
+
+app.post('/api/auth/login', async (req: Request, res: Response) => {
+    const { username, password } = req.body;
+
+    const user = await User.findOne({
+        username: username,
+        userType: {$in: ['tourist', 'owner']}
+    });
+
+    if(!user) {
+        return res.status(401).json({message: "Incorrect credentials."});
+    }
+
+    if(user.status !== 'active') {
+        return res.status(403).json({message: "The account is awaiting approval from admin."});
+    }
+
+    const isPasswordCorrect = await bcrypt.compare(password, user.password);
+    if(!isPasswordCorrect) {
+        return res.status(401).json({message: "Incorrect credentials."});
+    }
+
+    const token = jwt.sign(
+        {id: user._id, username: user.username, userType: user.userType},
+        'SUPER_SECRET_KEY',
+        {expiresIn: '3h'}
+    );
+
+    res.status(200).json({token: token, userType: user.userType});
 });
 
 app.listen(port, () => {
