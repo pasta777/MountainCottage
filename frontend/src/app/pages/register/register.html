@@ -1,0 +1,75 @@
+<div class="register-container">
+    <h2>Registration</h2>
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+        <div class="form-row">
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" id="name" formControlName="name">
+                <div *ngIf="registerForm.get('name')?.invalid && registerForm.get('name')?.touched" class="error">
+                    Name is required.
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="surname">Surname</label>
+                <input type="text" id="surname" formControlName="surname">
+                <div *ngIf="registerForm.get('surname')?.invalid && registerForm.get('surname')?.touched" class="error">
+                    Surname is required.
+                </div>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label for="name">Username</label>
+                <input type="text" id="username" formControlName="username">
+                <div *ngIf="registerForm.get('name')?.invalid && registerForm.get('name')?.touched" class="error">
+                    Username is required.
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="surname">Password</label>
+                <input type="password" id="password" formControlName="password">
+                <div *ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.touched" class="error">
+                    <small *ngIf="registerForm.get('password')?.errors?.['required']">Password is required</small>
+                    <small *ngIf="registerForm.get('password')?.errors?.['pattern']">Password must have 6-10 characters, 1 uppercase letter, 3 lowercase letters, 1 number and 1 special character.</small>
+                </div>
+            </div>
+        </div>
+
+        <input type="text" placeholder="Address" formControlName="address">
+        <input type="text" placeholder="Phone Number" formControlName="phoneNumber">
+        <input type="email" placeholder="Email" formControlName="email">
+        <input type="text" placeholder="Credit Card Number" formControlName="creditCardNumber">
+
+        <div class="form-row">
+            <div class="form-group">
+                <label>Gender</label>
+                <select formControlName="gender">
+                    <option value="M">Male</option>
+                    <option value="F">Female</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>I want to register as</label>
+                <select formControlName="userType">
+                    <option value="tourist">Tourist</option>
+                    <option value="owner">Owner</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="profilePicture">Profile Picture (Optional)</label>
+            <input type="file" id="profilePicture" (change)="onFileSelected($event)">
+        </div>
+
+        <button type="submit" [disabled]="registerForm.invalid">Register</button>
+
+        <div *ngIf="registrationSuccess" class="success-message">
+            {{ registrationSuccess }}
+        </div>
+        <div *ngIf="registrationError" class="error-message">
+            {{ registrationError }}
+        </div>
+
+    </form>
+</div>
