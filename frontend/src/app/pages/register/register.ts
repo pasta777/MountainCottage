@@ -1,7 +1,39 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, AbstractControl, ValidationErrors } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Auth } from '../../services/auth';
+
+export function luhnValidator(control: AbstractControl): ValidationErrors | null {
+  let cardNumber = control.value as string;
+  if(!cardNumber) {
+    return null;
+  }
+
+  cardNumber = cardNumber.replace(/\s/g, '');
+
+  let sum = 0;
+  let shouldDouble = false;
+
+  for(let i = cardNumber.length - 1; i >= 0; i--) {
+    let digit = parseInt(cardNumber.charAt(i), 10);
+
+    if(shouldDouble) {
+      digit *= 2;
+      if(digit > 9) {
+        digit -= 9;
+      }
+    }
+
+    sum += digit;
+    shouldDouble = !shouldDouble;
+  }
+
+  if(sum % 10 === 0) {
+    return null;
+  } else {
+    return {luhnInvalid: true};
+  }
+}
 
 @Component({
   selector: 'app-register',
@@ -29,8 +61,8 @@ export class Register implements OnInit {
       password: ['', [Validators.required, Validators.pattern(passwordRegex)]],
       address: ['', Validators.required],
       phoneNumber: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]], // TODO
-      creditCardNumber: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
+      creditCardNumber: ['', [Validators.required, luhnValidator]],
       gender: ['M', Validators.required],
       userType: ['tourist', Validators.required],
       profilePicture: [null]
@@ -38,7 +70,8 @@ export class Register implements OnInit {
 
     this.registerForm.get('creditCardNumber')?.valueChanges.subscribe(value => {
       if(value) {
-        this.detectedCardType = this.detectCardType(value);
+        const cleanValue = value.replace(/\s/g, '');
+        this.detectedCardType = this.detectCardType(cleanValue);
       } else {
         this.detectedCardType = null;
       }
@@ -97,5 +130,14 @@ export class Register implements OnInit {
         this.registrationError = err.error.message || 'Unknown error has occured.';
       }
     });
+  }
+
+  onCardNumberInput(event: any): void {
+    const inputElement = event.target as HTMLInputElement;
+    const initialValue = inputElement.value;
+
+    const sanitizedValue = initialValue.replace(/[^0-9\s]/g, '');
+
+    this.registerForm.get('creditCardNumber')?.setValue(sanitizedValue, {emitEvent: false});
   }
 }

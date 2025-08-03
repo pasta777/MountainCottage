@@ -42,12 +42,16 @@
         <div class="form-group">
             <label for="creditCardNumber">Credit Card Number</label>
             <div class="input-with-icon">
-                <input type="text" formControlName="creditCardNumber" id="creditCardNumber">
+                <input type="text" formControlName="creditCardNumber" id="creditCardNumber" (input)="onCardNumberInput($event)">
                 <span class="card-icon">
                     <img *ngIf="detectedCardType === 'diners'" src="/assets/icons/diners.png" alt="Diners Club">
                     <img *ngIf="detectedCardType === 'mastercard'" src="/assets/icons/mastercard.png" alt="Mastercard">
                     <img *ngIf="detectedCardType === 'visa'" src="/assets/icons/visa.png" alt="Visa">
                 </span>
+            </div>
+            <div *ngIf="registerForm.get('creditCardNumber')?.errors && registerForm.get('creditCardNumber')?.touched" class="error">
+                <small *ngIf="registerForm.get('creditCardNumber')?.errors?.['required']">Credit card number is required.</small>
+                <small *ngIf="registerForm.get('creditCardNumber')?.errors?.['luhnInvalid']">The credit card number is invalid</small>
             </div>
 
         </div>
