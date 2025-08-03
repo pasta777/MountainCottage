@@ -1,0 +1,13 @@
+<div class="container">
+    <h2>My Cottages</h2>
+    <button routerLink="/add-cottage">Add New Cottage</button>
+
+    <div *ngFor="let v of myCottages" class="cottage-card">
+        <h3>{{ v.name }}</h3>
+        <p>{{ v.location }}</p>
+        <div>
+            <button [routerLink]="['/modify-cottage', v._id]">Modify</button>
+            <button (click)="onDelete(v._id)">Delete</button>
+        </div>
+    </div>
+</div>

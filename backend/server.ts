@@ -8,6 +8,7 @@ import path from "path";
 import fs from 'fs';
 import jwt from 'jsonwebtoken'
 import { checkAuth } from "./src/middleware/auth.middleware";
+import Cottage from './src/models/cottage.model';
 
 const mongoURI = 'mongodb://localhost:27017/mountain_cottage';
 mongoose.connect(mongoURI)
@@ -41,6 +42,8 @@ const storage = multer.diskStorage({
 
 const upload = multer({storage: storage});
 
+const cottageUpload = multer({dest: 'uploads/cottages/'});
+
 app.get('/api/test', (req: Request, res: Response) => {
     res.json({message: 'Pozzz'});
 });
@@ -58,13 +61,76 @@ app.get('/api/users/profile', checkAuth, async (req: any, res: Response) => {
     res.status(200).json(user);
 });
 
+app.get('/api/cottages/my-cottages', checkAuth, async (req: any, res: Response) => {
+    const cottages = await Cottage.find({ownerId: req.userData.id});
+    res.status(200).json(cottages);
+});
+
+app.get('/api/cottages/:id', async (req: Request, res: Response) => {
+    try {
+        const cottage = await Cottage.findById(req.params.id);
+        if(!cottage) {
+            return res.status(404).json({message: "Cottage not found."});
+        }
+        res.status(200).json(cottage);
+    } catch(error) {
+        res.status(500).json({message: "Server error."});
+    }
+});
+
 app.put('/api/users/profile', checkAuth, async (req: any, res: Response) => {
     const updatedUser = await User.findByIdAndUpdate(req.userData.id, req.body, {new: true});
     res.status(200).json(updatedUser);
 });
 
+app.put('api/cottages/:id', checkAuth, cottageUpload.array('pictures', 10), async (req: any, res: Response) => {
+    try {
+        const cottage = await Cottage.findById(req.params.id);
+        if(!cottage) {
+            return res.status(404).json({message: "Cottage not found."});
+        }
+
+        if(cottage.ownerId.toString() !== req.userData.id) {
+            return res.status(403).json({message: "Permission denied."});
+        }
+
+        const data = req.body;
+
+        const updatedCottage = await Cottage.findByIdAndUpdate(req.params.id, data, {new: true});
+        res.status(200).json(updatedCottage);
+    } catch(error) {
+        res.status(500).json({message: "Server error."});
+    }
+});
+
+app.post('/api/cottages', checkAuth, cottageUpload.array('pictures', 10), async (req: any, res: Response) => {
+    try {
+        const data = req.body;
+        const picturesFiles = req.files as Express.Multer.File[];
+
+        const picturesPaths = picturesFiles.map(file => file.path);
+
+        const newCottage = new Cottage({
+            ...data,
+            pictures: picturesPaths,
+            ownerId: req.userData.id
+        });
+
+        await newCottage.save();
+        res.status(201).json(newCottage);
+    } catch(error) {
+        res.status(500).json({message: "Server error."});
+    }
+});
+
 app.post('/api/auth/change-password', checkAuth, async (req: any, res: Response) => {
     const {oldPassword, newPassword} = req.body;
+    
+    const passwordRegex = /^(?=.*[A-Z])(?=(?:.*[a-z]){3})(?=.*\d)(?=.*[\W_]).{6,10}$/;
+
+    if(!passwordRegex.test(newPassword)) {
+        return res.status(400).json({message: "New password doesn't meet required conditions."});
+    }
 
     const user = await User.findById(req.userData.id);
     if(!user) {
@@ -75,8 +141,6 @@ app.post('/api/auth/change-password', checkAuth, async (req: any, res: Response)
     if(!isPasswordCorrect) {
         return res.status(401).json({message: "Old password isn't correct"});
     }
-
-    // TODO: Dodati validaciju nove lozinke (regex)
 
     const hashedNewPassword = await bcrypt.hash(newPassword, 10);
     user.password = hashedNewPassword;
@@ -189,6 +253,34 @@ app.post('/api/auth/login', async (req: Request, res: Response) => {
     );
 
     res.status(200).json({token: token, userType: user.userType});
+});
+
+app.delete('/api/cottages/:id', checkAuth, async (req: any, res: Response) => {
+    try {
+        const cottage = await Cottage.findOne({_id: req.params.id, ownerId: req.userData.id});
+        if(!cottage) {
+            return res.status(404).json({message: "Cottage not found or you are not its owner"});
+        }
+
+        const picturesForDeleting = cottage.pictures;
+
+        await cottage.deleteOne();
+
+        if(picturesForDeleting && picturesForDeleting.length > 0) {
+            picturesForDeleting.forEach(relativePath => {
+                const fullPath = path.join(__dirname, '..', relativePath);
+                fs.unlink(fullPath, (err) => {
+                    if(err) {
+                        console.error(`Error while deleting file ${fullPath}`, err);
+                    }
+                });
+            });
+        }
+
+        res.status(200).json({message: "Cottage has been successfully removed."});
+    } catch(error) {
+        res.status(500).json({message: "Server error."});
+    }
 });
 
 app.listen(port, () => {
