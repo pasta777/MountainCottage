@@ -27,7 +27,7 @@ export class Register implements OnInit {
       password: ['', [Validators.required, Validators.pattern(passwordRegex)]],
       address: ['', Validators.required],
       phoneNumber: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]],
+      email: ['', [Validators.required, Validators.email]], // TODO
       creditCardNumber: ['', Validators.required],
       gender: ['M', Validators.required],
       userType: ['tourist', Validators.required],
