@@ -38,7 +38,19 @@
         <input type="text" placeholder="Address" formControlName="address">
         <input type="text" placeholder="Phone Number" formControlName="phoneNumber">
         <input type="email" placeholder="Email" formControlName="email">
-        <input type="text" placeholder="Credit Card Number" formControlName="creditCardNumber">
+
+        <div class="form-group">
+            <label for="creditCardNumber">Credit Card Number</label>
+            <div class="input-with-icon">
+                <input type="text" formControlName="creditCardNumber" id="creditCardNumber">
+                <span class="card-icon">
+                    <img *ngIf="detectedCardType === 'diners'" src="/assets/icons/diners.png" alt="Diners Club">
+                    <img *ngIf="detectedCardType === 'mastercard'" src="/assets/icons/mastercard.png" alt="Mastercard">
+                    <img *ngIf="detectedCardType === 'visa'" src="/assets/icons/visa.png" alt="Visa">
+                </span>
+            </div>
+
+        </div>
 
         <div class="form-row">
             <div class="form-group">

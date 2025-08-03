@@ -1,0 +1,21 @@
+.input-with-icons {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-with-icons input {
+    width: 100%;
+    padding-right: 40px;
+}
+
+.card-icon {
+    position: absolute;
+    right: 10px;
+    height: 24px;
+}
+
+.card-icon img {
+    height: 100%;
+    width: auto;
+}

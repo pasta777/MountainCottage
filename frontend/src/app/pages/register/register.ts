@@ -15,6 +15,8 @@ export class Register implements OnInit {
   registrationError: string | null = null;
   registrationSuccess: string | null = null;
 
+  detectedCardType: string | null = null;
+
   constructor(private fb: FormBuilder, private authService: Auth) {}
 
   ngOnInit(): void {
@@ -33,6 +35,33 @@ export class Register implements OnInit {
       userType: ['tourist', Validators.required],
       profilePicture: [null]
     });
+
+    this.registerForm.get('creditCardNumber')?.valueChanges.subscribe(value => {
+      if(value) {
+        this.detectedCardType = this.detectCardType(value);
+      } else {
+        this.detectedCardType = null;
+      }
+    });
+  }
+
+  private detectCardType(cardNumber: string): string | null {
+    const dinersPrefixes = ['300', '301', '302', '303', '36', '38'];
+    if(dinersPrefixes.some(prefix => cardNumber.startsWith(prefix)) && cardNumber.length == 15) {
+      return 'diners';
+    }
+
+    const mastercardPrefixes = ['51', '52', '53', '54', '55'];
+    if(mastercardPrefixes.some(prefix => cardNumber.startsWith(prefix)) && cardNumber.length == 16) {
+      return 'mastercard';
+    }
+
+    const visaPrefixes = ['4539', '4556', '4916', '4532', '4929', '4485', '4716'];
+    if(visaPrefixes.some(prefix => cardNumber.startsWith(prefix)) && cardNumber.length == 16) {
+      return 'visa';
+    }
+
+    return null;
   }
 
   onFileSelected(event: any): void {
