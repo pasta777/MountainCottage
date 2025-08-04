@@ -10,6 +10,7 @@ import jwt from 'jsonwebtoken'
 import { checkAuth } from "./src/middleware/auth.middleware";
 import Cottage from './src/models/cottage.model';
 import Reservation from './src/models/reservation.model';
+import Review from './src/models/review.model';
 
 const mongoURI = 'mongodb://localhost:27017/mountain_cottage';
 mongoose.connect(mongoURI)
@@ -130,6 +131,15 @@ app.get('/api/stats/general', async (req: Request, res: Response) => {
         });
     } catch(error) {
         res.status(500).json({message: "Gathering statistics error."});
+    }
+});
+
+app.get('/api/reviews/cottage/:cottageId', async (req, res) => {
+    try {
+        const reviews = await Review.find({cottageId: req.params.cottageId}).populate('touristId', 'name surname').sort({date: -1});
+        res.status(200).json(reviews);
+    } catch(error) {
+        res.status(500).json({message: "Gathering reviews error."});
     }
 });
 
@@ -308,6 +318,62 @@ app.post('/api/auth/login', async (req: Request, res: Response) => {
     );
 
     res.status(200).json({token: token, userType: user.userType});
+});
+
+app.post('/api/reservations', checkAuth, async (req: any, res: Response) => {
+
+    if(req.userData.userType !== 'tourist') {
+        return res.status(403).json({message: "Only tourists are authorized for this action."});
+    }
+
+    const data = req.body;
+
+    const overlappingReservations = await Reservation.find({
+        cottageId: data.cottageId,
+        status: {$in: ['approved', 'unresolved']},
+        $or: [
+            {startDate: {$lt: data.endDate}, endDate: {$gt: data.startDate}}
+        ]
+    });
+
+    if(overlappingReservations.length > 0) {
+        return res.status(400).json({message: "The cottage is not available for selected period."})
+    }
+
+    const newReservation = new Reservation({
+        ...data,
+        touristId: req.userData.id,
+        status: 'unresolved'
+    });
+
+    await newReservation.save();
+    res.status(201).json(newReservation);
+});
+
+app.post('/api/reviews', checkAuth, async (req: any, res: Response) => {
+    try {
+        const {cottageId, rating, comment} = req.body;
+
+        const touristId = req.userData.id;
+
+        const newReview = new Review({
+            cottageId,
+            touristId,
+            rating,
+            comment
+        });
+
+        await newReview.save();
+
+        const allReviews = await Review.find({cottageId: cottageId});
+        const average = allReviews.reduce((sum, r) => sum + r.rating, 0) / allReviews.length;
+
+        await Cottage.findByIdAndUpdate(cottageId, {averageRating: average});
+
+        res.status(201).json(newReview);
+    } catch(error) {
+        res.status(500).json({message: "Server error."});
+    }
 });
 
 app.delete('/api/cottages/:id', checkAuth, async (req: any, res: Response) => {

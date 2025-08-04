@@ -82,7 +82,8 @@
               }
             ],
             "styles": [
-              "src/styles.css"
+              "src/styles.css",
+              "./node-modles/leaflet/dist/leaflet.css"
             ]
           }
         }

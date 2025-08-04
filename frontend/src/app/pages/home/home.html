@@ -51,11 +51,20 @@
             </thead>
             <tbody>
                 <tr *ngFor="let v of cottages">
-                    <td>{{ v.name }}</td>
+                    <td><a [routerLink]="['/cottage', v._id]">{{ v.name }}</a></td>
                     <td>{{ v.location }}</td>
+                    <td>
+                        <span *ngIf="v.averageRating > 0">
+                            {{ v.averageRating.toFixed(1) }} / 5
+                            <span *ngFor="let i of [1, 2, 3, 4, 5]" class="star">
+                                {{ i <= v.averageRating ? '★' : '☆' }}
+                            </span>
+                        </span>
+                        <span *ngIf="v.averageRating === 0">No reviews</span>
+                    </td>
                 </tr>
                 <tr *ngIf="cottages.length === 0">
-                    <td colspan="2">There are no results.</td>
+                    <td colspan="3">There are no results.</td>
                 </tr>
             </tbody>
         </table>

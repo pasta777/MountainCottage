@@ -1,0 +1,92 @@
+<div class="details-container">
+    <section class="headers">
+        <h1>{{ cottage.name }}</h1>
+        <p>{{ cottage.location }} | Phone: {{ cottage.phoneNumber }}</p>
+    </section>
+
+    <section class="gallery">
+        <h2>Gallery</h2>
+        <div class="image-grid">
+            <img *ngFor="let picture of cottage.pictures" [src]="'http://localhost:3000/' + picture" [alt]="cottage.name">
+        </div>
+    </section>
+
+    <div class="main-content">
+        <div class="info-column">
+            <section class="info-section">
+                <h2>Services</h2>
+                <p>{{ cottage.services }}</p>
+            </section>
+            <section class="info-section">
+                <h2>Price</h2>
+                <p>Summer: {{ cottage.tariff.summer }} EUR/night</p>
+                <p>Winter: {{ cottage.tariff.winter }} EUR/night</p>
+            </section>
+
+            <section class="info-section">
+                <h2>Location on Map</h2>
+                <div class="map-container" leaflet [leafletOptions]="mapOptions" (leafletMapReady)="onMapReady($event)"></div>
+            </section>
+        </div>
+        <div class="booking-column">
+            <section class="booking-form">
+                <h2>Book!</h2>
+                <form [formGroup]="reservationForm">
+                    <div *ngIf="currentStep === 1">
+                        <div class="form-group">
+                            <label>Arrival date</label>
+                            <input type="date" formControlName="startDate">
+                        </div>
+                        <div class="form-group">
+                            <label>Departure date</label>
+                            <input type="date" formControlName="endDate">
+                        </div>
+                        <div formGroupName="numOfPersons" class="form-row">
+                            <div class="form-group">
+                                <label>Adults</label>
+                                <input type="number" formControlName="adults">
+                            </div>
+                            <div class="form-group">
+                                <label>Children</label>
+                                <input type="number" formControlName="children">
+                            </div>
+                        </div>
+                        <button (click)="nextStep()" [disabled]="!reservationForm.get('startDate')?.valid || !reservationForm.get('endDate')?.valid">Next</button>
+                    </div>
+                    
+                    <div *ngIf="currentStep === 2">
+                        <h3>Booking confirmation</h3>
+                        <p><strong>Cottage:</strong> {{ cottage.name }}</p>
+                        <p><strong>Arrival:</strong> {{ reservationForm.value.startDate | date: 'dd.MM.yyyy' }}</p>
+                        <p><strong>Departure:</strong> {{ reservationForm.value.endDate | date: 'dd.MM.yyyy' }}</p>
+                        <p><strong>Full price:</strong> {{ fullPrice }}</p>
+
+                        <div class="form-group">
+                            <label>Card Number</label>
+                            <input type="text" formControlName="cardNumber">
+                        </div>
+                        <div class="form-group">
+                            <label>Additional requests (optional)</label>
+                            <textarea formControlName="additionalRequests" rows="3"></textarea>
+                        </div>
+                        <div class="button-group">
+                            <button (click)="lastStep()">Back</button>
+                            <button (click)="sendReservation()" [disabled]="reservationForm.invalid">Confirm and Book</button>
+                        </div>
+                    </div>
+                </form>
+                <div *ngIf="reservationSuccess" class="success-message">{{ reservationSuccess }}</div>
+                <div *ngIf="reservationError" class="error-message">{{ reservationError }}</div>
+            </section>
+        </div>
+    </div>
+    <section class="comments">
+        <h2>Comments and Reviews</h2>
+        <div *ngIf="reviews.length === 0"><p>There are not comments for this cottage.</p></div>
+        <div *ngFor="let r of reviews" class="comment-card">
+            <p><strong>{{ r.touristId.name }} {{ r.touristId.surname }}</strong> - Rating: {{ r.rating }}</p>
+            <p>"{{ r.comment }}"</p>
+            <small>{{ r.date | date: 'dd.MM.yyyy' }}</small>
+        </div>
+    </section>
+</div>

@@ -14,7 +14,8 @@ const cottageSchema = new mongoose.Schema({
         lon: {type: Number, required: true},
     },
     pictures: [{type: String}],
-    ownerId: {type: Schema.Types.ObjectId, ref: 'User', required: true}
+    ownerId: {type: Schema.Types.ObjectId, ref: 'User', required: true},
+    averageRating: {type: Number, default: 0}
 });
 
 export default mongoose.model('Cottage', cottageSchema, 'cottages');

@@ -10,6 +10,7 @@ import { MyCottages } from './pages/my-cottages/my-cottages';
 import { CottageForm } from './pages/cottage-form/cottage-form';
 import { roleGuard } from './guards/role-guard';
 import { Home } from './pages/home/home';
+import { CottageDetails } from './pages/cottage-details/cottage-details';
 
 export const routes: Routes = [
     {path: '', component: Home},
@@ -21,5 +22,6 @@ export const routes: Routes = [
     {path: 'change-password', component: ChangePassword},
     {path: 'my-cottages', component: MyCottages, canActivate: [authGuard, roleGuard]},
     {path: 'add-cottage', component: CottageForm, canActivate: [authGuard, roleGuard]},
-    {path: 'modify-cottage/:id', component: CottageForm, canActivate: [authGuard, roleGuard]}
+    {path: 'modify-cottage/:id', component: CottageForm, canActivate: [authGuard, roleGuard]},
+    {path: 'cottage/:id', component: CottageDetails}
 ];
