@@ -1,0 +1,27 @@
+<div class="container">
+    <h1>My Cottages Stats</h1>
+    <section>
+        <h2>Number of reservations made per month</h2>
+        <div *ngIf="barChartData.length > 0; else noData">
+            <ngx-charts-bar-vertical-stacked
+                [view]="view"
+                [results]="barChartData"
+                [gradient]="gradient"
+                [xAxis]="showXAxis"
+                [yAxis]="showYAxis"
+                [legend]="showLegend"
+                [showXAxisLabel]="showXAxisLabel"
+                [showYAxisLabel]="showYAxisLabel"
+                [xAxisLabel]="xAxisLabel"
+                [yAxisLabel]="yAxisLabel">
+            </ngx-charts-bar-vertical-stacked>
+        </div>
+        <ng-template #noData>
+            <p>There is no data for reservations.</p>
+        </ng-template>
+    </section>
+
+    <section>
+        
+    </section>
+</div>

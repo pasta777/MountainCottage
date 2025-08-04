@@ -20,6 +20,7 @@
   },
   "private": true,
   "dependencies": {
+    "@angular/cdk": "^20.1.4",
     "@angular/common": "^20.1.0",
     "@angular/compiler": "^20.1.0",
     "@angular/core": "^20.1.0",
@@ -32,6 +33,7 @@
     "@fullcalendar/daygrid": "^6.1.18",
     "@fullcalendar/interaction": "^6.1.18",
     "@fullcalendar/timegrid": "^6.1.18",
+    "@swimlane/ngx-charts": "^23.0.0-alpha.0",
     "jwt-decode": "^4.0.0",
     "leaflet": "^1.9.4",
     "rxjs": "~7.8.0",

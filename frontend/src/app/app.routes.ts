@@ -13,19 +13,21 @@ import { Home } from './pages/home/home';
 import { CottageDetails } from './pages/cottage-details/cottage-details';
 import { OwnerReservations } from './pages/owner-reservations/owner-reservations';
 import { MyReservations } from './pages/my-reservations/my-reservations';
+import { OwnerStats } from './pages/owner-stats/owner-stats';
 
 export const routes: Routes = [
     {path: '', component: Home},
     {path: 'register', component: Register},
-    {path: 'admin/login', component: AdminLogin},
-    {path: 'admin/dashboard', component: AdminDashboard},
+    {path: 'admin/login', component: AdminLogin, canActivate: [authGuard]},
+    {path: 'admin/dashboard', component: AdminDashboard, canActivate: [authGuard]},
     {path: 'login', component: Login},
     {path: 'profile', component: Profile, canActivate: [authGuard]},
-    {path: 'change-password', component: ChangePassword},
-    {path: 'my-cottages', component: MyCottages, canActivate: [authGuard, roleGuard]},
-    {path: 'add-cottage', component: CottageForm, canActivate: [authGuard, roleGuard]},
-    {path: 'modify-cottage/:id', component: CottageForm, canActivate: [authGuard, roleGuard]},
+    {path: 'change-password', component: ChangePassword, canActivate: [authGuard]},
+    {path: 'my-cottages', component: MyCottages, canActivate: [authGuard, roleGuard], data: {expectedRole: 'owner'}},
+    {path: 'add-cottage', component: CottageForm, canActivate: [authGuard, roleGuard], data: {expectedRole: 'owner'}},
+    {path: 'modify-cottage/:id', component: CottageForm, canActivate: [authGuard, roleGuard], data: {expectedRole: 'owner'}},
     {path: 'cottage/:id', component: CottageDetails},
     {path: 'owner/reservations', component: OwnerReservations, canActivate: [authGuard, roleGuard], data: {expectedRole: 'owner'}},
     {path: 'my-reservations', component: MyReservations, canActivate: [authGuard, roleGuard], data: {expectedRole: 'tourist'}},
+    {path: 'owner/stats', component: OwnerStats, canActivate: [authGuard, roleGuard], data: {expectedRole: 'owner'}}
 ];

@@ -174,6 +174,50 @@ app.get('/api/reservations/my', checkAuth, async (req: any, res: Response) => {
     }
 });
 
+app.get('/api/stats/owner', checkAuth, async (req: any, res: Response) => {
+    try {
+        const myCottages = await Cottage.find({ownerId: req.userData.id}).select('_id name');
+        const idsCottages = myCottages.map(c => c._id);
+
+        const reservationsByMonth = await Reservation.aggregate([
+            {$match: {cottageId: {$in: idsCottages}, status: 'approved'}},
+            {
+                $group: {
+                    _id: {
+                        cottageId: "$cottageId",
+                        year: {$year: "$startDate"},
+                        month: {$month: "$startDate"}
+                    },
+                    numOfReservations: {$sum: 1}
+                }
+            },
+            {
+                $lookup: {
+                    from: "cottages",
+                    localField: "_id.cottageId",
+                    foreignField: "_id",
+                    as: "cottageInfo"
+                }
+            },
+            {$unwind: "$cottageInfo"},
+            {
+                $project: {
+                    _id: 0,
+                    cottageName: "$cottageInfo.name",
+                    year: "$_id.year",
+                    month: "$_id.month",
+                    numOfReservations: "$numOfReservations"
+                }
+            }
+        ]);
+
+        res.json({reservationsByMonth: reservationsByMonth});
+    } catch(error) {
+        console.error(error);
+        res.status(500).json({message: "Server error."});
+    }
+});
+
 app.put('/api/users/profile', checkAuth, async (req: any, res: Response) => {
     const updatedUser = await User.findByIdAndUpdate(req.userData.id, req.body, {new: true});
     res.status(200).json(updatedUser);
