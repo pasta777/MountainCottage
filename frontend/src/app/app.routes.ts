@@ -12,6 +12,7 @@ import { roleGuard } from './guards/role-guard';
 import { Home } from './pages/home/home';
 import { CottageDetails } from './pages/cottage-details/cottage-details';
 import { OwnerReservations } from './pages/owner-reservations/owner-reservations';
+import { MyReservations } from './pages/my-reservations/my-reservations';
 
 export const routes: Routes = [
     {path: '', component: Home},
@@ -25,5 +26,6 @@ export const routes: Routes = [
     {path: 'add-cottage', component: CottageForm, canActivate: [authGuard, roleGuard]},
     {path: 'modify-cottage/:id', component: CottageForm, canActivate: [authGuard, roleGuard]},
     {path: 'cottage/:id', component: CottageDetails},
-    {path: 'owner/reservations', component: OwnerReservations, canActivate: [authGuard, roleGuard], data: {expectedRole: 'owner'}}
+    {path: 'owner/reservations', component: OwnerReservations, canActivate: [authGuard, roleGuard], data: {expectedRole: 'owner'}},
+    {path: 'my-reservations', component: MyReservations, canActivate: [authGuard, roleGuard], data: {expectedRole: 'tourist'}},
 ];

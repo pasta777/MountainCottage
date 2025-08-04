@@ -158,6 +158,22 @@ app.get('/api/reservations/owner', checkAuth, async (req: any, res: Response) =>
     }
 });
 
+app.get('/api/reservations/my', checkAuth, async (req: any, res: Response) => {
+    try {
+        if(req.userData.userType !== 'tourist') {
+            return res.status(403).json({message: "Access denied. Only tourists can access this page."});
+        }
+
+        const reservations = await Reservation.find({touristId: req.userData.id})
+            .populate('cottageId', 'name location')
+            .sort({startDate: -1});
+
+        res.json(reservations);
+    } catch(error) {
+        res.status(500).json({message: "Server error."});
+    }
+});
+
 app.put('/api/users/profile', checkAuth, async (req: any, res: Response) => {
     const updatedUser = await User.findByIdAndUpdate(req.userData.id, req.body, {new: true});
     res.status(200).json(updatedUser);
@@ -178,6 +194,30 @@ app.put('api/cottages/:id', checkAuth, cottageUpload.array('pictures', 10), asyn
 
         const updatedCottage = await Cottage.findByIdAndUpdate(req.params.id, data, {new: true});
         res.status(200).json(updatedCottage);
+    } catch(error) {
+        res.status(500).json({message: "Server error."});
+    }
+});
+
+app.post('/api/reservations/:id/cancel', checkAuth, async (req: any, res: Response) => {
+    try {
+        const reservation = await Reservation.findOne({_id: req.params.id, touristId: req.userData.id});
+
+        if(!reservation) {
+            return res.status(404).json({message: "Reservation not found."});
+        }
+
+        const today = new Date();
+        const dayBeforeStart = new Date(reservation.startDate.getTime() - (24 * 60 * 60 * 1000));
+
+        if(today > dayBeforeStart) {
+            return res.status(400).json({message: "Cancelation is not allowed 24h before start of the reservation."});
+        }
+
+        reservation.status = 'canceled';
+        await reservation.save();
+
+        res.json({message: "Reservation canceled successfully."});
     } catch(error) {
         res.status(500).json({message: "Server error."});
     }
@@ -367,7 +407,7 @@ app.post('/api/reservations', checkAuth, async (req: any, res: Response) => {
 
 app.post('/api/reviews', checkAuth, async (req: any, res: Response) => {
     try {
-        const {cottageId, rating, comment} = req.body;
+        const {cottageId, rating, comment, reservationId} = req.body;
 
         const touristId = req.userData.id;
 
@@ -379,6 +419,10 @@ app.post('/api/reviews', checkAuth, async (req: any, res: Response) => {
         });
 
         await newReview.save();
+
+        if(reservationId) {
+            await Reservation.findByIdAndUpdate(reservationId, {isReviewed: true});
+        }
 
         const allReviews = await Review.find({cottageId: cottageId});
         const average = allReviews.reduce((sum, r) => sum + r.rating, 0) / allReviews.length;

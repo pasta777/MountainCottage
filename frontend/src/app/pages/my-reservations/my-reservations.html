@@ -1,0 +1,80 @@
+<div class="container">
+    <h1>My Reservations</h1>
+    
+    <section>
+        <h2>Current Reservations</h2>
+        <div *ngIf="currentReservations.length === 0"><p>You have no current reservations.</p></div>
+        <table *ngIf="currentReservations.length > 0">
+            <<thead>
+                <tr>
+                    <th>Cottage</th>
+                    <th>Period</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let res of currentReservations">
+                    <td>{{ res.cottageId.name }} ({{ res.cottageId.location }})</td>
+                    <td>{{ res.startDate | date: 'dd.MM.yyyy' }} - {{ res.endDate | date: 'dd.MM.yyyy' }}</td>
+                    <td>{{ res.status }}</td>
+                    <td>
+                        <button *ngIf="res.status !== 'canceled' && canCancel(res)" (click)="onCancel(res._id)">Cancel</button>
+                    </td>
+                </tr>
+            </tbody>>
+        </table>
+    </section>
+
+    <section>
+        <h2>Reservations Archive</h2>
+        <div *ngIf="reservationsArchive.length === 0"><p>You have no previous reservations.</p></div>
+        <table *ngIf="reservationsArchive.length > 0">
+            <thead>
+                <tr>
+                    <th>Cottage</th>
+                    <th>Period</th>
+                    <th>Status</th>
+                    <th>Review</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let res of reservationsArchive">
+                    <td>{{ res.cottageId.name }} ({{ res.cottageId.location }})</td>
+                    <td>{{ res.startDate | date: 'dd.MM.yyyy' }} - {{ res.endDate | date: 'dd.MM.yyyy' }}</td>
+                    <td>{{ res.status }}</td>
+                    <td>
+                        <button *ngIf="res.status === 'approved' || isPastDate(res.startDate) && !res.isReviewed" (click)="openFormForReview(res)">Post a Review</button>
+                        <span *ngIf="res.isReviewed">Reviewed</span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <div class="modal-overlay" *ngIf="reservationForReview">
+        <div class="modal-content">
+            <h3>Leave a review for the cottage "{{ reservationForReview.cottageId.name }}</h3>
+            <form [formGroup]="formForReview" (ngSubmit)="onSendReview()">
+                <div class="form-group">
+                    <label>Rating (1-5)</label>
+                    <select formControlName="rating">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Comment</label>
+                    <textarea formControlName="comment" rows="4"></textarea>
+                </div>
+                <div class="button-group">
+                    <button type="button" (click)="reservationForReview = null">Back</button>
+                    <button type="submit" [disabled]="formForReview.invalid">Send</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

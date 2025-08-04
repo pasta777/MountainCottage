@@ -6,6 +6,8 @@ const reservationSchema = new mongoose.Schema({
     startDate: {type: Date, required: true},
     endDate: {type: Date, required: true},
     status: {type: String, required: true},
+    denyComment: {type: String},
+    isReviewed: {type: Boolean, default: false}
 }, {
     timestamps: true
 });

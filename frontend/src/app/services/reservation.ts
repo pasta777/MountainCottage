@@ -30,6 +30,14 @@ export class Reservation {
   }
 
   denyReservation(id: string, comment: string): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}`, {denyComment: comment}, {headers: this.getAuthHeaders()});
+    return this.http.post<any>(`${this.apiUrl}/${id}/deny`, {denyComment: comment}, {headers: this.getAuthHeaders()});
+  }
+
+  getMyReservationsTourist(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/my`, {headers: this.getAuthHeaders()});
+  }
+
+  cancelReservation(id: string): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/${id}/cancel`, {}, {headers: this.getAuthHeaders()});
   }
 }
