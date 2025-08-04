@@ -450,35 +450,37 @@ app.post('/api/auth/change-password', checkAuth, async (req: any, res: Response)
 app.post('/api/auth/register', upload.single('profilePicture'), async (req: Request, res: Response) => {
     try {
         const {
-            username, password, name, surname, gender, address, phoneNumber, email, creditCardNumber, userType
+            password, username, email, ...otherData
         } = req.body;
 
-        const existingUser = await User.findOne({$or: [{username}, {email}]});
+        const existingUser = await User.findOne({username: username});
         if(existingUser) {
-            return res.status(409).json({message: "Username or email already exist."});
+            return res.status(409).json({message: "Username already exists."});
+        }
+
+        const existingEmail = await User.findOne({email: email});
+        if(existingEmail) {
+            return res.status(409).json({message: "Email already exists."});
         }
 
         const hashedPassword = await bcrypt.hash(password, 10);
 
         const newUser = new User({
             username,
-            name,
-            surname,
-            password: hashedPassword,
-            gender,
-            address,
-            phoneNumber,
             email,
-            creditCardNumber,
-            userType,
+            ...otherData,
+            password: hashedPassword,
             profilePicture: req.file ? req.file.path : 'uploads/default.png'
         });
 
         await newUser.save();
 
         res.status(201).json({message: "Request for registration is successfully sent and is awaiting for approval."});
-    } catch(error) {
+    } catch(error: any) {
         console.error('Registration error: ', error);
+        if(error.code === 11000) {
+            return res.status(409).json({message: "Username or email already exist."});
+        }
         res.status(500).json({message: "Server error."});
     }
 });

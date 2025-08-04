@@ -1,21 +1,34 @@
-import { Component, OnInit, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
-import { Api } from './services/api';
+import { Component } from '@angular/core';
+import { Router, RouterLink, RouterOutlet } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { Auth } from './services/auth';
+import { jwtDecode } from 'jwt-decode';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  imports: [RouterOutlet, CommonModule, RouterLink],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
-export class App implements OnInit {
-  protected readonly title = signal('frontend');
+export class App {
+  title = 'Mountain Cottage';
 
-  constructor(private apiService: Api) {}
+  constructor(public authService: Auth, private router: Router) {}
 
-  ngOnInit(): void {
-    this.apiService.getTestMessage().subscribe(data => {
-      console.log('Message from the server: ', data);
-    });
+  getUserRole(): string | null {
+    const token = this.authService.getToken() || this.authService.getAdminToken();
+    if(!token) {
+      return null;
+    }
+    try {
+      const decodedToken: any = jwtDecode(token);
+      return decodedToken.userType;
+    } catch(error) {
+      return null;
+    }
+  }
+
+  logout(): void {
+    this.authService.logout();
   }
 }

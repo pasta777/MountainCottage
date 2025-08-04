@@ -7,7 +7,7 @@ import { Router } from '@angular/router';
   providedIn: 'root'
 })
 export class Auth {
-  private apiUrl = 'https://localhost:3000/api/auth';
+  private apiUrl = 'http://localhost:3000/api/auth';
 
   constructor(private http: HttpClient, private router: Router) {}
 
@@ -62,5 +62,9 @@ export class Auth {
 
   isLoggedIn(): boolean {
     return this.getToken() !== null;
+  }
+
+  isAdminLoggedIn(): boolean {
+    return this.getAdminToken() !== null;
   }
 }
