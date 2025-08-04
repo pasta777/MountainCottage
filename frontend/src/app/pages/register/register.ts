@@ -1,7 +1,44 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, AbstractControl, ValidationErrors } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, AbstractControl, ValidationErrors, AsyncValidatorFn } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Auth } from '../../services/auth';
+import { Observable, of } from 'rxjs';
+
+export function createImageDimensionValidator(minWidth: number, minHeight: number, maxWidth: number, maxHeight: number): AsyncValidatorFn {
+  return (control: AbstractControl): Observable<ValidationErrors | null> => {
+    const file = control.value as File;
+    if(!file) {
+      return of(null);
+    }
+
+    const allowedTypes = ['image/jpeg', 'image/png'];
+    if(!allowedTypes.includes(file.type)) {
+      return of({imageType: true});
+    }
+
+    return new Observable(observer => {
+      const image = new Image();
+      image.src = URL.createObjectURL(file);
+      image.onload = () => {
+        const width = image.width;
+        const height = image.height;
+        URL.revokeObjectURL(image.src);
+
+        if(width < minWidth || height < minHeight) {
+          observer.next({minDimnesions: {required: `${minWidth}x${maxHeight}`, actual: `${width}x${height}`}});
+        } else if(width > maxWidth || height > maxHeight) {
+          observer.next({maxDimensions: {required: `${maxWidth}x${maxHeight}`, actual: `${width}x${height}`}});
+        } else {
+          observer.next(null);
+        }
+      };
+      image.onerror = () => {
+        observer.next({invalidImage: true});
+        observer.complete();
+      };
+    });
+  }
+}
 
 export function luhnValidator(control: AbstractControl): ValidationErrors | null {
   let cardNumber = control.value as string;
@@ -65,7 +102,11 @@ export class Register implements OnInit {
       creditCardNumber: ['', [Validators.required, luhnValidator]],
       gender: ['M', Validators.required],
       userType: ['tourist', Validators.required],
-      profilePicture: [null]
+      profilePicture: [
+        null,
+        [],
+        [createImageDimensionValidator(100, 100, 300, 300)]
+      ]
     });
 
     this.registerForm.get('creditCardNumber')?.valueChanges.subscribe(value => {
@@ -98,9 +139,10 @@ export class Register implements OnInit {
   }
 
   onFileSelected(event: any): void {
-    if(event.target.files && event.target.files.length > 0) {
-      this.selectedFile = event.target.files[0];
-    }
+    const file = event.target.files && event.target.files.length > 0 ? event.target.files[0] : null;
+    
+    this.registerForm.get('profilePicture')?.setValue(file);
+    this.selectedFile = file;
   }
 
   onSubmit(): void {
