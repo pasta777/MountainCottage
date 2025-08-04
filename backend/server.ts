@@ -9,6 +9,7 @@ import fs from 'fs';
 import jwt from 'jsonwebtoken'
 import { checkAuth } from "./src/middleware/auth.middleware";
 import Cottage from './src/models/cottage.model';
+import Reservation from './src/models/reservation.model';
 
 const mongoURI = 'mongodb://localhost:27017/mountain_cottage';
 mongoose.connect(mongoURI)
@@ -75,6 +76,60 @@ app.get('/api/cottages/:id', async (req: Request, res: Response) => {
         res.status(200).json(cottage);
     } catch(error) {
         res.status(500).json({message: "Server error."});
+    }
+});
+
+app.get('/api/cottages', async (req: Request, res: Response) => {
+    try {
+        const { name, location, sortBy, sortOrder } = req.query;
+
+        const filter: any = {};
+        if(name) {
+            filter.name = {$regex: name, $options: 'i'};
+        }
+        if(location) {
+            filter.location = {$regex: location, $options: 'i'};
+        }
+
+        const sort: any = {};
+        if(sortBy && (sortBy === 'name' || sortBy === 'location')) {
+            sort[sortBy as string] = sortOrder === 'desc' ? -1 : 1;
+        } else {
+            sort['name'] = 1;
+        }
+
+        const cottages = await Cottage.find(filter).sort(sort);
+        res.json(cottages);
+    } catch(error) {
+        res.status(500).json({message: "Gathering cottages error."});
+    }
+});
+
+app.get('/api/stats/general', async (req: Request, res: Response) => {
+    try {
+        const allCottages = await Cottage.countDocuments();
+        const allOwners = await User.countDocuments({userType: 'owner', status: 'active'});
+        const allTourists = await User.countDocuments({userType: 'tourist', status: 'active'});
+
+        const now = new Date();
+        const before24h = new Date(now.getDate() - 24 * 60 * 60 * 1000);
+        const before7d = new Date(now.getDate() - 7 * 24 * 60 * 60 * 1000);
+        const before30d = new Date(now.getDate() - 30 * 24 * 60 * 60 * 1000);
+
+        const reservations24h = await Reservation.countDocuments({createdAt: {$gte: before24h}});
+        const reservations7d = await Reservation.countDocuments({createdAt: {$gte: before7d}});
+        const reservations30d = await Reservation.countDocuments({createdAt: {$gte: before30d}});
+
+        res.json({
+            allCottages,
+            allOwners,
+            allTourists,
+            reservations24h,
+            reservations7d,
+            reservations30d
+        });
+    } catch(error) {
+        res.status(500).json({message: "Gathering statistics error."});
     }
 });
 

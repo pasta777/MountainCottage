@@ -9,8 +9,10 @@ import { ChangePassword } from './pages/change-password/change-password';
 import { MyCottages } from './pages/my-cottages/my-cottages';
 import { CottageForm } from './pages/cottage-form/cottage-form';
 import { roleGuard } from './guards/role-guard';
+import { Home } from './pages/home/home';
 
 export const routes: Routes = [
+    {path: '', component: Home},
     {path: 'register', component: Register},
     {path: 'admin/login', component: AdminLogin},
     {path: 'admin/dashboard', component: AdminDashboard},
