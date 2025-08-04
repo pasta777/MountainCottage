@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Cottage } from '../../services/cottage';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-cottage-form',
-  imports: [],
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './cottage-form.html',
   styleUrl: './cottage-form.css'
 })
@@ -57,6 +58,29 @@ export class CottageForm implements OnInit {
         lon: data.coordinates.lon
       });
     });
+  }
+
+  onJsonFileSelected(event: any): void {
+    const file = event.target.files[0];
+    if(!file) {
+      return;
+    }
+
+    const fileReader = new FileReader();
+    fileReader.onload = (e) => {
+      try {
+        const result = e.target?.result;
+        if(typeof result === 'string') {
+          const data = JSON.parse(result);
+          this.cottageForm.patchValue(data);
+          alert("Data from JSON file has been successfully loaded into form.");
+        }
+      } catch(error) {
+        console.error("Error while reading JSON file: ", error);
+        alert("An error has occured. Check if JSON file is formatted correctly.");
+      }
+    };
+    fileReader.readAsText(file);
   }
 
   onFileSelected(event: any): void {

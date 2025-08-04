@@ -1,1 +1,60 @@
-<p>cottage-form works!</p>
+<div class="container">
+    <h2>{{ editMode ? 'Data modification for Cottage' : 'Add new Cottage' }}</h2>
+
+    <div class="form-group json-upload">
+        <label for="jsonFile">You can fill in the form by uploading a JSON file!</label>
+        <input type="file" id="jsonFile" (change)="onJsonFileSelected($event)" accept=".json">
+        <small>The pictures must be uploaded manually.</small>
+    </div>
+
+    <form [formGroup]="cottageForm" (ngSubmit)="onSubmit()">
+        <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" id="name" formControlName="name">
+        </div>
+        <div class="form-group">
+            <label for="location">Location</label>
+            <input type="text" id="location" formControlName="location">
+        </div>
+        <div class="form-group">
+            <label for="services">Services (separated by comma)</label>
+            <textarea id="services" formControlName="services" rows="3"></textarea>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="location">Price - Summer (EUR/night)</label>
+                <input type="number" id="summerTariff" formControlName="summerTariff">
+            </div>
+            <div class="form-group">
+                <label for="location">Price - Winter (EUR/night)</label>
+                <input type="number" id="winterTariff" formControlName="winterTariff">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="phoneNumber">Phone Number</label>
+            <input type="text" id="phoneNumber" formControlName="phoneNumber">
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="lat">Latitude</label>
+                <input type="number" id="lat" formControlName="lat">
+            </div>
+            <div class="form-group">
+                <label for="lon">Longitude</label>
+                <input type="number" id="lon" formControlName="lon">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="pictures">Pictures (limited to 10)</label>
+            <input type="file" id="pictures" (change)="onFileSelected($event)" multiple>
+        </div>
+
+        <button type="submit" [disabled]="cottageForm.invalid">
+            {{ editMode ? 'Save Changes' : 'Add Cottage' }}
+        </button>
+    </form>
+</div>
