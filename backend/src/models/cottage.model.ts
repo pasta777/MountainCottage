@@ -15,7 +15,8 @@ const cottageSchema = new mongoose.Schema({
     },
     pictures: [{type: String}],
     ownerId: {type: Schema.Types.ObjectId, ref: 'User', required: true},
-    averageRating: {type: Number, default: 0}
+    averageRating: {type: Number, default: 0},
+    blockedUntil: {type: Date}
 });
 
 export default mongoose.model('Cottage', cottageSchema, 'cottages');

@@ -1,0 +1,31 @@
+<div class="container">
+    <h1>Cottages Management</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Location</th>
+                <th>Owner</th>
+                <th>Average Rating</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let c of cottages" [ngClass]="{'problematic': c.haveToColor}">
+                <td>{{ c.name }}</td>
+                <td>{{ c.location }}</td>
+                <td>{{ c.ownerId.name }} {{ c.ownerId.surname }}</td>
+                <td>{{ c.averageRating.toFixed(1) }} / 5</td>
+                <td>
+                    <span *ngIf="isBlocked(c)">Blocked until {{ c.blockedUntil | date: 'dd.MM.yyyy HH:mm' }}</span>
+                    <span *ngIf="!isBlocked(c)">Active</span>
+                </td>
+                <td>
+                    <button *ngIf="c.haveToColor && !isBlocked(c)" (click)="onBlock(c._id)">Block (48h)</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

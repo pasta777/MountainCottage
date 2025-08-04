@@ -67,6 +67,34 @@ app.get('/api/admin/users', checkAuth, async (req: any, res: Response) => {
     }
 });
 
+app.get('/api/admin/cottages', checkAuth, async (req: any, res: Response) => {
+    if(req.userData.userType !== 'administrator') {
+        return res.status(403).json({message: "The access is allowed only for admins."});
+    }
+    try {
+        const allCottages = await Cottage.find().populate('ownerId', 'name surname');
+        const cottagesWithStatus = [];
+
+        for(const cottage of allCottages) {
+            const lastReviews = await Review.find({cottageId: cottage._id}).sort({date: -1}).limit(3);
+
+            let haveToColor = false;
+            if(lastReviews.length === 3) {
+                const allLessThan2 = lastReviews.every(rating => rating.rating < 2);
+                if(allLessThan2) {
+                    haveToColor = true;
+                }
+            }
+
+            cottagesWithStatus.push({...cottage.toObject(), haveToColor});
+        }
+
+        res.json(cottagesWithStatus);
+    } catch(error) {
+        res.status(500).json({message: "Server error."});
+    }
+});
+
 app.get('/api/users/profile', checkAuth, async (req: any, res: Response) => {
     const user = await User.findById(req.userData.id).select('-password');
     if(!user) {
@@ -325,6 +353,25 @@ app.post('/api/admin/users/:id/toggle-status', checkAuth, async (req: any, res: 
         user.status = user.status === 'active' ? 'inactive' : 'active';
         await user.save();
         res.json({message: `User status changed to '${user.status}'`});
+    } catch(error) {
+        res.status(500).json({message: "Server error."});
+    }
+});
+
+app.post('/api/admin/cottages/:id/block', checkAuth, async (req: any, res: Response) => {
+    if(req.userData.userType !== 'administrator') {
+        return res.status(403).json({message: "The access is allowed only for admins."});
+    }
+    try {
+        const today = new Date();
+        const blockedUntil = new Date(today.getTime() + 48 * 60 * 60 * 1000); // blocked for 48 hours
+
+        const cottage = await Cottage.findByIdAndUpdate(req.params.id, {blockedUntil: blockedUntil}, {new: true});
+
+        if(!cottage) {
+            return res.status(404).json({message: "Cottage not found."});
+        }
+        res.json({message: `Cottage "${cottage.name}" is blocked until ${blockedUntil.toLocaleString()}`});
     } catch(error) {
         res.status(500).json({message: "Server error."});
     }
