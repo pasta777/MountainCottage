@@ -11,10 +11,25 @@ export class Reservation {
 
   constructor(private http: HttpClient, private authService: Auth) {}
 
-  createReservation(data: any): Observable<any> {
-    const headers = new HttpHeaders({
+  private getAuthHeaders(): HttpHeaders {
+    return new HttpHeaders({
       'Authorization': `Bearer ${this.authService.getToken()}`
-    });
-    return this.http.post<any>(this.apiUrl, data, {headers});
+    })
+  }
+
+  createReservation(data: any): Observable<any> {
+    return this.http.post<any>(this.apiUrl, data, {headers: this.getAuthHeaders()});
+  }
+
+  getMyReservationsOwner(): Observable<any[]> {
+    return this.http.get<any>(`${this.apiUrl}/owner`, {headers: this.getAuthHeaders()});
+  }
+
+  approveReservation(id: string): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/${id}/approve`, {}, {headers: this.getAuthHeaders()});
+  }
+
+  denyReservation(id: string, comment: string): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}`, {denyComment: comment}, {headers: this.getAuthHeaders()});
   }
 }

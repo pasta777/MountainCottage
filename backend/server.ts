@@ -143,6 +143,21 @@ app.get('/api/reviews/cottage/:cottageId', async (req, res) => {
     }
 });
 
+app.get('/api/reservations/owner', checkAuth, async (req: any, res: Response) => {
+    try {
+        const myCottages = await Cottage.find({ownerId: req.userData.id}).select('_.id');
+        const idsCottages = myCottages.map(c => c._id);
+
+        const reservations = await Reservation.find({cottageId: {$in: idsCottages}})
+            .populate('cottageId', 'name')
+            .populate('touristId', 'name surname')
+            .sort({createdAt: -1});
+        res.json(reservations);
+    } catch(error) {
+        res.status(500).json({message: "Server error."});
+    }
+});
+
 app.put('/api/users/profile', checkAuth, async (req: any, res: Response) => {
     const updatedUser = await User.findByIdAndUpdate(req.userData.id, req.body, {new: true});
     res.status(200).json(updatedUser);
@@ -371,6 +386,43 @@ app.post('/api/reviews', checkAuth, async (req: any, res: Response) => {
         await Cottage.findByIdAndUpdate(cottageId, {averageRating: average});
 
         res.status(201).json(newReview);
+    } catch(error) {
+        res.status(500).json({message: "Server error."});
+    }
+});
+
+app.post('/api/reservations/:id/approve', checkAuth, async (req: any, res: Response) => {
+    try {
+        if(req.userData.userType !== 'owner') {
+            return res.status(401).json({message: "Only owner can approve a reservation."});
+        }
+
+        const updatedReservation = await Reservation.findByIdAndUpdate(req.params.id, {status: 'approved'}, {new: true});
+        if(!updatedReservation) {
+            return res.status(404).json({message: "Reservation not found."});
+        }
+        res.json(updatedReservation);
+    } catch(error) {
+        res.status(500).json({message: "Server error."});
+    }
+});
+
+app.post('/api/reservations/:id/deny', checkAuth, async (req: any, res: Response) => {
+    try {
+        const {denyComment} = req.body;
+        if(!denyComment) {
+            return res.status(400).json({message: "The comment is required for denying the reservation."});   
+        }
+
+        if(req.userData.userType !== 'owner') {
+            return res.status(401).json({message: "Only owner can approve a reservation."});
+        }
+
+        const updatedReservation = await Reservation.findByIdAndUpdate(req.params.id, {status: 'denied', denyComment: denyComment}, {new: true});
+        if(!updatedReservation) {
+            return res.status(404).json({message: "Reservation not found."});
+        }
+        res.json(updatedReservation);
     } catch(error) {
         res.status(500).json({message: "Server error."});
     }

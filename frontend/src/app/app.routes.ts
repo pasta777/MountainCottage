@@ -11,6 +11,7 @@ import { CottageForm } from './pages/cottage-form/cottage-form';
 import { roleGuard } from './guards/role-guard';
 import { Home } from './pages/home/home';
 import { CottageDetails } from './pages/cottage-details/cottage-details';
+import { OwnerReservations } from './pages/owner-reservations/owner-reservations';
 
 export const routes: Routes = [
     {path: '', component: Home},
@@ -23,5 +24,6 @@ export const routes: Routes = [
     {path: 'my-cottages', component: MyCottages, canActivate: [authGuard, roleGuard]},
     {path: 'add-cottage', component: CottageForm, canActivate: [authGuard, roleGuard]},
     {path: 'modify-cottage/:id', component: CottageForm, canActivate: [authGuard, roleGuard]},
-    {path: 'cottage/:id', component: CottageDetails}
+    {path: 'cottage/:id', component: CottageDetails},
+    {path: 'owner/reservations', component: OwnerReservations, canActivate: [authGuard, roleGuard], data: {expectedRole: 'owner'}}
 ];

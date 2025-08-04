@@ -1,0 +1,33 @@
+<div class="container">
+    <h1>Reservation Management</h1>
+    <section class="reservation-list">
+        <h2>New Requests</h2>
+        <div *ngIf="unresolvedReservations.length === 0">
+            <p>There are no new requests for reservations at the moment.</p>
+        </div>
+        <table *ngIf="unresolvedReservations.length > 0">
+            <thead>
+                <tr>
+                    <th>Cottage</th>
+                    <th>Tourist</th>
+                    <th>Period</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody *ngFor="let res of unresolvedReservations">
+                <td>{{ res.cottageId.name }}</td>
+                <td>{{ res.touristId.name }} {{ res.touristId.surname }}</td>
+                <td>{{ res.dateStart | date: 'dd.MM.yyyy' }} - {{ res.dateEnd | date: 'dd.MM.yyyy' }}</td>
+                <td>
+                    <button class="approve-btn" (click)="onApprove(res._id)">Approve</button>
+                    <button class="deny-btn" (click)="onDeny(res._id)">Deny</button>
+                </td>
+            </tbody>
+        </table>
+    </section>
+
+    <section class="calendar-section">
+        <h2>Calendar</h2>
+        <full-calendar [options]="calendarOptions"></full-calendar>
+    </section>
+</div>
