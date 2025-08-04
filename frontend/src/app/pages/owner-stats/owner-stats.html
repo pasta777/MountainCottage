@@ -1,6 +1,6 @@
 <div class="container">
     <h1>My Cottages Stats</h1>
-    <section>
+    <section class="bar-chart-section">
         <h2>Number of reservations made per month</h2>
         <div *ngIf="barChartData.length > 0; else noData">
             <ngx-charts-bar-vertical-stacked
@@ -21,7 +21,22 @@
         </ng-template>
     </section>
 
-    <section>
-        
+    <section class="pie-chart-section">
+        <h2>Booking ratio: Weekend / Working Days</h2>
+        <div *ngIf="pieChartData.length > 0; else noPieData" class="pie-chart-grid">
+            <div *ngFor="let chart of pieChartData" class="pie-chart-container">
+                <h3>{{ chart.name }}</h3>
+                <ngx-charts-pie-chart
+                    [view]="[400, 300]"
+                    [results]="chart.data"
+                    [gradient]="gradient"
+                    [legend]="showLegend"
+                    [labels]="showPieChartLabels">
+                </ngx-charts-pie-chart>
+            </div>
+        </div>
+        <ng-template #noPieData>
+            <p>There is not data for booking ratio.</p>
+        </ng-template>
     </section>
 </div>

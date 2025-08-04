@@ -211,7 +211,53 @@ app.get('/api/stats/owner', checkAuth, async (req: any, res: Response) => {
             }
         ]);
 
-        res.json({reservationsByMonth: reservationsByMonth});
+        const weekendWorkingDay = await Reservation.aggregate([
+            {$match: {cottageId: {$in: idsCottages}, status: 'approved'}},
+            {
+                $project: {
+                    cottageId: "$cottageId",
+                    dayInWeek: {$dayOfWeek: "$startDate"},
+                }
+            },
+            {
+                $group: {
+                    _id: {
+                        cottageId: "$cottageId",
+                        dayType: {
+                            $cond: {if: {$in: ["$dayInWeek", [1, 7]]}, then: "Weekend", else: "Working Day"}
+                        }
+                    },
+                    number: {$sum: 1}
+                }
+            },
+            {
+                $group: {
+                    _id: "$_id.cottageId",
+                    data: {$push: {type: "$_id.dayType", number: "$number"}}
+                }
+            },
+            {
+                $lookup: {
+                    from: "cottages",
+                    localField: "_id",
+                    foreignField: "_id",
+                    as: "cottageInfo"
+                }
+            },
+            {$unwind: "$cottageInfo"},
+            {
+                $project: {
+                    _id: 0,
+                    cottageName: "$cottageInfo.name",
+                    data: "$data"
+                }
+            }
+        ]);
+
+        res.json({
+            reservationsByMonth: reservationsByMonth,
+            weekendWorkingDay: weekendWorkingDay
+        });
     } catch(error) {
         console.error(error);
         res.status(500).json({message: "Server error."});

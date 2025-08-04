@@ -11,22 +11,27 @@ import { Stats } from '../../services/stats';
 })
 export class OwnerStats implements OnInit {
   barChartData: any[] = [];
+  pieChartData: any[] = [];
 
   view: [number, number] = [700, 400];
+  gradient = true;
+  showLegend = true;
+
   showXAxis = true;
   showYAxis = true;
-  gradient = false;
-  showLegend = true;
   showXAxisLabel = true;
   xAxisLabel = 'Month';
   showYAxisLabel = true;
   yAxisLabel = 'Number of Reservations';
+
+  showPieChartLabels = true;
 
   constructor(private statsService: Stats) {}
 
   ngOnInit(): void {
     this.statsService.getOwnerStats().subscribe(data => {
       this.formatBarChartData(data.reservationsByMonth);
+      this.formatPieChartData(data.weekendWorkingDay);
     });
   }
 
@@ -46,5 +51,17 @@ export class OwnerStats implements OnInit {
     });
 
     this.barChartData = Object.values(groupedData);
+  }
+
+  formatPieChartData(apiData: any[]): void {
+    this.pieChartData = apiData.map(cottage => {
+      return {
+        name: cottage.cottageName,
+        data: cottage.data.map((p: {type: any, number: any}) => ({
+          name: p.type,
+          value: p.number,
+        })),
+      }
+    });
   }
 }
