@@ -1,0 +1,30 @@
+<div class="container">
+    <h1>Users Management</h1>
+
+    <table>
+        <thead>
+            <tr>Name</tr>
+            <tr>Username</tr>
+            <tr>Email</tr>
+            <tr>Type</tr>
+            <tr>Status</tr>
+            <tr>Actions</tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let u of users" [ngClass]="{'inactive': u.status === 'inactive'}">
+                <td>{{ u.name }} {{ u.surname }}</td>
+                <td>{{ u.username }}</td>
+                <td>{{ u.email }}</td>
+                <td>{{ u.userType }}</td>
+                <td>{{ u.status }}</td>
+                <td>
+                    <button class="edit-btn" [routerLink]="['/admin/users/edit', u._id]">Modify</button>
+                    <button (click)="onToggleStatus(u._id)">
+                        {{ u.status === 'active' ? 'Deactivate' : 'Activate' }}
+                    </button>
+                    <button class="delete-btn" (click)="onDelete(u._id)">Delete</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

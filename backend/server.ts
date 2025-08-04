@@ -55,6 +55,18 @@ app.get('/api/admin/registration-requests', async (_req: Request, res: Response)
     res.status(200).json(requests);
 });
 
+app.get('/api/admin/users', checkAuth, async (req: any, res: Response) => {
+    if(req.userData.userType !== 'administrator') {
+        return res.status(403).json({message: "The access is allowed only for admins."});
+    }
+    try {
+        const users = await User.find({userType: {$ne: 'administrator'}});
+        res.json(users);
+    } catch(error) {
+        res.status(500).json({message: "Server error."});
+    }
+});
+
 app.get('/api/users/profile', checkAuth, async (req: any, res: Response) => {
     const user = await User.findById(req.userData.id).select('-password');
     if(!user) {
@@ -264,6 +276,18 @@ app.get('/api/stats/owner', checkAuth, async (req: any, res: Response) => {
     }
 });
 
+app.put('/api/admin/users/:id', checkAuth, async (req: any, res: Response) => {
+    if(req.userData.userType !== 'administrator') {
+        return res.status(403).json({message: "The access is allowed only for admins."});
+    }
+    try {
+        const updatedUser = await User.findByIdAndUpdate(req.params.id, req.body, {new: true});
+        res.json(updatedUser);
+    } catch(error) {
+        res.status(500).json({message: "Server error."});
+    }
+});
+
 app.put('/api/users/profile', checkAuth, async (req: any, res: Response) => {
     const updatedUser = await User.findByIdAndUpdate(req.userData.id, req.body, {new: true});
     res.status(200).json(updatedUser);
@@ -284,6 +308,23 @@ app.put('api/cottages/:id', checkAuth, cottageUpload.array('pictures', 10), asyn
 
         const updatedCottage = await Cottage.findByIdAndUpdate(req.params.id, data, {new: true});
         res.status(200).json(updatedCottage);
+    } catch(error) {
+        res.status(500).json({message: "Server error."});
+    }
+});
+
+app.post('/api/admin/users/:id/toggle-status', checkAuth, async (req: any, res: Response) => {
+    if(req.userData.userType !== 'administrator') {
+        return res.status(403).json({message: "The access is allowed only for admins."});
+    }
+    try {
+        const user = await User.findById(req.params.id);
+        if(!user) {
+            return res.status(404).json({message: "User not found."});
+        }
+        user.status = user.status === 'active' ? 'inactive' : 'active';
+        await user.save();
+        res.json({message: `User status changed to '${user.status}'`});
     } catch(error) {
         res.status(500).json({message: "Server error."});
     }
@@ -558,6 +599,50 @@ app.post('/api/reservations/:id/deny', checkAuth, async (req: any, res: Response
         }
         res.json(updatedReservation);
     } catch(error) {
+        res.status(500).json({message: "Server error."});
+    }
+});
+
+app.delete('/api/admin/users/:id', checkAuth, async (req: any, res: Response) => {
+    if(req.userData.userType !== 'administrator') {
+        return res.status(403).json({message: "The access is allowed only for admins."});
+    }
+    try {
+        const userId = req.params.id;
+        const userToDelete = await User.findById(userId);
+
+        if(!userToDelete) {
+            return res.status(404).json({message: "User not found."});
+        }
+
+        if(userToDelete.userType === 'owner') {
+            const cottages = await Cottage.find({ownerId: userId});
+            for(const cottage of cottages) {
+                if(cottage.pictures && cottage.pictures.length > 0) {
+                    cottage.pictures.forEach(relativePath => {
+                        const fullPath = path.join(__dirname, '..', relativePath);
+                        fs.unlink(fullPath, err => {
+                            if(err) console.error(`Error while deleting file ${fullPath}: `, err);
+                        });
+                    })
+                }
+                await Reservation.deleteMany({cottageId: cottage._id});
+                await Review.deleteMany({cottageId: cottage._id});
+            }
+
+            await Cottage.deleteMany({ownerId: userId});
+        }
+
+        if(userToDelete.userType === 'tourist') {
+            await Reservation.deleteMany({touristId: userId});
+            await Review.deleteMany({touristId: userId});
+        }
+
+        await User.findByIdAndDelete(userId);
+
+        res.json({message: "The user is deleted successfully."});
+    } catch(error) {
+        console.error(error);
         res.status(500).json({message: "Server error."});
     }
 });

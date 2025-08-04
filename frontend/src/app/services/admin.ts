@@ -29,4 +29,20 @@ export class Admin {
   rejectRequest(userId: string): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/reject-request/${userId}`, {}, {headers: this.getAuthHeaders()});
   }
+
+  getAllUsers(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/users`, {headers: this.getAuthHeaders()});
+  }
+
+  toggleUserStatus(userId: string): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/users/${userId}/toggle-status`, {}, {headers: this.getAuthHeaders()});
+  }
+
+  deleteUser(userId: string): Observable<any> {
+    return this.http.delete<any>(`${this.apiUrl}/users/${userId}`, {headers: this.getAuthHeaders()});
+  }
+
+  updateUser(userId: string, userData: any): Observable<any> {
+    return this.http.put<any>(`${this.apiUrl}/users/${userId}`, userData, {headers: this.getAuthHeaders()});
+  }
 }
