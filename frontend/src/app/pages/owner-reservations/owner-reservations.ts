@@ -42,8 +42,8 @@ export class OwnerReservations implements OnInit {
     this.calendarOptions.events = reservations.map(res => ({
       id: res._id,
       title: `${res.cottageId.name} - ${res.touristId.name} ${res.touristId.surname}`,
-      start: res.dateStart,
-      end: res.dateEnd,
+      start: res.startDate,
+      end: res.endDate,
       color: res.status === 'approved' ? 'green' : (res.status === 'unresolved' ? 'orange' : 'grey')
     }));
   }

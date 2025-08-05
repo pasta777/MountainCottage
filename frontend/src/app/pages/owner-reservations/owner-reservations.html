@@ -17,7 +17,7 @@
             <tbody *ngFor="let res of unresolvedReservations">
                 <td>{{ res.cottageId.name }}</td>
                 <td>{{ res.touristId.name }} {{ res.touristId.surname }}</td>
-                <td>{{ res.dateStart | date: 'dd.MM.yyyy' }} - {{ res.dateEnd | date: 'dd.MM.yyyy' }}</td>
+                <td>{{ res.startDate | date: 'dd.MM.yyyy' }} - {{ res.endDate | date: 'dd.MM.yyyy' }}</td>
                 <td>
                     <button class="approve-btn" (click)="onApprove(res._id)">Approve</button>
                     <button class="deny-btn" (click)="onDeny(res._id)">Deny</button>
