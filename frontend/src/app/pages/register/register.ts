@@ -152,6 +152,8 @@ export class Register implements OnInit {
 
     const sanitizedValue = initialValue.replace(/[^0-9\s]/g, '');
 
+    this.detectCardType(sanitizedValue);
+
     this.registerForm.get('creditCardNumber')?.setValue(sanitizedValue, {emitEvent: false});
   }
 }
