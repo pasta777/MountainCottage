@@ -10,6 +10,10 @@ export class Cottage {
 
   constructor(private http: HttpClient) {}
 
+  getCottages(): Observable<any[]> {
+    return this.http.get<any[]>(this.apiUrl);
+  }
+
   getMyCottages(): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/my-cottages`);
   }

@@ -17,6 +17,7 @@ import { OwnerStats } from './pages/owner-stats/owner-stats';
 import { AdminUsersManagement } from './pages/admin-users-management/admin-users-management';
 import { AdminUserEdit } from './pages/admin-user-edit/admin-user-edit';
 import { AdminCottagesManagement } from './pages/admin-cottages-management/admin-cottages-management';
+import { Cottages } from './pages/cottages/cottages';
 
 export const routes: Routes = [
     {path: '', component: Home},
@@ -33,6 +34,7 @@ export const routes: Routes = [
     {path: 'add-cottage', component: CottageForm, canActivate: [authGuard, roleGuard], data: {expectedRole: 'owner'}},
     {path: 'modify-cottage/:id', component: CottageForm, canActivate: [authGuard, roleGuard], data: {expectedRole: 'owner'}},
     {path: 'cottage/:id', component: CottageDetails},
+    {path: 'cottages', component: Cottages, canActivate: [authGuard, roleGuard], data: {expectedRole: 'tourist'}},
     {path: 'owner/reservations', component: OwnerReservations, canActivate: [authGuard, roleGuard], data: {expectedRole: 'owner'}},
     {path: 'my-reservations', component: MyReservations, canActivate: [authGuard, roleGuard], data: {expectedRole: 'tourist'}},
     {path: 'owner/stats', component: OwnerStats, canActivate: [authGuard, roleGuard], data: {expectedRole: 'owner'}}

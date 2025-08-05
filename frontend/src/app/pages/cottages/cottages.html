@@ -1,0 +1,42 @@
+<div class="container">
+    <h1>All Cottages</h1>
+    <p>Find your perfect place for vacation!</p>
+
+    <form [formGroup]="searchForm" (ngSubmit)="onSearch()" class="search-form">
+        <input type="text" formControlName="name" placeholder="Cottage name...">
+        <input type="text" formControlName="location" placeholder="Location...">
+        <button type="submit">Search</button>
+    </form>
+
+    <table>
+        <thead>
+            <tr>
+                <th (click)="onSort('name')">
+                    Name
+                    <span *ngIf="sortBy === 'name'">{{ sortOrder === 'asc' ? '↑' : '↓' }}</span>
+                </th>
+                <th (click)="onSort('location')">
+                    Location
+                    <span *ngIf="sortBy === 'location'">{{ sortOrder === 'asc' ? '↑' : '↓' }}</span>
+                </th>
+                <th>Average Rating</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let c of cottages">
+                <td><a [routerLink]="['/cottage', c._id]">{{ c.name }}</a></td>
+                <td>{{ c.location }}</td>
+                <td>
+                    <span *ngIf="c.averageRating > 0" class="rating">
+                        <span class="numeric-rating">{{ c.averageRating.toFixed(1) }}</span>
+                        <span *ngFor="let star of getStarRating(c.averageRating)" class="star">{{ star }}</span>
+                    </span>
+                    <span *ngIf="!c.averageRating || c.averageRating === 0">No reviews</span>
+                </td>
+            </tr>
+            <tr *ngIf="cottages.length === 0">
+                <td colspan="3">There are no results.</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
