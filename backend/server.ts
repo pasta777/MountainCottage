@@ -51,7 +51,7 @@ app.get('/api/test', (req: Request, res: Response) => {
 });
 
 app.get('/api/admin/registration-requests', async (_req: Request, res: Response) => {
-    const requests = await User.find({status: 'awaiting_approval'});
+    const requests = await User.find({status: 'waiting_for_approval'});
     res.status(200).json(requests);
 });
 
@@ -321,7 +321,7 @@ app.put('/api/users/profile', checkAuth, async (req: any, res: Response) => {
     res.status(200).json(updatedUser);
 });
 
-app.put('api/cottages/:id', checkAuth, cottageUpload.array('pictures', 10), async (req: any, res: Response) => {
+app.put('/api/cottages/:id', checkAuth, cottageUpload.array('pictures', 10), async (req: any, res: Response) => {
     try {
         const cottage = await Cottage.findById(req.params.id);
         if(!cottage) {

@@ -12,7 +12,7 @@ export class User {
   constructor(private http: HttpClient, private authService: Auth) {}
 
   private getAuthHeaders(): HttpHeaders {
-    const token = this.authService.getToken();
+    const token = this.authService.getActiveToken();
     return new HttpHeaders({
       'Authorization': `Bearer ${token}`
     });

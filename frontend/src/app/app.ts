@@ -16,7 +16,7 @@ export class App {
   constructor(public authService: Auth, private router: Router) {}
 
   getUserRole(): string | null {
-    const token = this.authService.getToken() || this.authService.getAdminToken();
+    const token = this.authService.getActiveToken();
     if(!token) {
       return null;
     }

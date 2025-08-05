@@ -13,7 +13,7 @@ export class Cottage {
 
   private getAuthHeaders(): HttpHeaders {
     return new HttpHeaders({
-      'Authorization': `Bearer ${this.authService.getToken()}`
+      'Authorization': `Bearer ${this.authService.getActiveToken()}`
     });
   }
 

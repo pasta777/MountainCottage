@@ -21,7 +21,7 @@ import { AdminCottagesManagement } from './pages/admin-cottages-management/admin
 export const routes: Routes = [
     {path: '', component: Home},
     {path: 'register', component: Register},
-    {path: 'admin/login', component: AdminLogin, canActivate: [authGuard]},
+    {path: 'admin/login', component: AdminLogin},
     {path: 'admin/dashboard', component: AdminDashboard, canActivate: [authGuard, roleGuard], data: {expectedRole: 'administrator'}},
     {path: 'admin/users', component: AdminUsersManagement, canActivate: [authGuard, roleGuard], data: {expectedRole: 'administrator'}},
     {path: 'admin/cottages', component: AdminCottagesManagement, canActivate: [authGuard, roleGuard], data: {expectedRole: 'administrator'}},

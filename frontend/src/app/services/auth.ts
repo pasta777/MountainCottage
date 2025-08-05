@@ -36,7 +36,7 @@ export class Auth {
   }
 
   changePassword(passwordData: any): Observable<any> {
-    const token = this.getToken();
+    const token = this.getUserToken();
 
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`
@@ -52,7 +52,7 @@ export class Auth {
     this.router.navigate(['/login']);
   }
 
-  getToken(): string | null {
+  getUserToken(): string | null {
     return localStorage.getItem('user_token');
   }
 
@@ -60,8 +60,12 @@ export class Auth {
     return localStorage.getItem('admin_token');
   }
 
+  getActiveToken(): string | null {
+    return this.getAdminToken() || this.getUserToken();
+  }
+
   isLoggedIn(): boolean {
-    return this.getToken() !== null;
+    return this.getActiveToken() !== null;
   }
 
   isAdminLoggedIn(): boolean {
