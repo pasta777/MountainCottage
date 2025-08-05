@@ -1,4 +1,4 @@
-<div class="details-container">
+<div *ngIf="cottage" class="details-container">
     <section class="headers">
         <h1>{{ cottage.name }}</h1>
         <p>{{ cottage.location }} | Phone: {{ cottage.phoneNumber }}</p>
@@ -6,7 +6,7 @@
 
     <section class="gallery">
         <h2>Gallery</h2>
-        <div class="image-grid">
+        <div class="picture-grid">
             <img *ngFor="let picture of cottage.pictures" [src]="'http://localhost:3000/' + picture" [alt]="cottage.name">
         </div>
     </section>
@@ -25,7 +25,7 @@
 
             <section class="info-section">
                 <h2>Location on Map</h2>
-                <div class="map-container" leaflet [leafletOptions]="mapOptions" (leafletMapReady)="onMapReady($event)"></div>
+                <div #mapContainer class="map-container" leaflet [leafletOptions]="mapOptions" (leafletMapReady)="onMapReady($event)"></div>
             </section>
         </div>
         <div class="booking-column">

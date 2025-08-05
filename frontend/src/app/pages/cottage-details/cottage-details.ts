@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
@@ -9,17 +9,35 @@ import { Review } from '../../services/review';
 import { Reservation } from '../../services/reservation';
 import { User } from '../../services/user';
 
+const iconRetinaUrl = 'assets/marker-icon-2x.png';
+const iconUrl = 'assets/marker-icon.png';
+const shadowUrl = 'assets/marker-shadow.png';
+const iconDefault = L.icon({
+  iconRetinaUrl,
+  iconUrl,
+  shadowUrl,
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  tooltipAnchor: [16, -28],
+  shadowSize: [41, 41],
+});
+L.Marker.prototype.options.icon = iconDefault;
+
 @Component({
   selector: 'app-cottage-details',
   imports: [CommonModule, ReactiveFormsModule, LeafletModule],
   templateUrl: './cottage-details.html',
-  styleUrl: './cottage-details.css'
+  styleUrls: ['./cottage-details.css', '../../../../node_modules/leaflet/dist/leaflet.css']
 })
-export class CottageDetails implements OnInit {
+export class CottageDetails implements OnInit, OnDestroy {
+  @ViewChild('mapContainer') mapContainer!: ElementRef;
+
   cottage: any;
   reviews: any[] = [];
   map: L.Map | undefined;
   mapOptions: L.MapOptions;
+  private resizeObserver: ResizeObserver | undefined;
 
   reservationForm: FormGroup;
   currentStep = 1;
@@ -60,7 +78,7 @@ export class CottageDetails implements OnInit {
     if(id) {
       this.cottageService.getCottageById(id).subscribe(data => {
         this.cottage = data;
-        this.initializeMap();
+        this.setupMap();
       });
       this.reviewService.getReviewsForCottage(id).subscribe(data => {
         this.reviews = data;
@@ -71,24 +89,30 @@ export class CottageDetails implements OnInit {
     }
   }
 
-  initializeMap(): void {
-    if(this.cottage?.coordinates) {
-      this.mapOptions.center = L.latLng(this.cottage.coordinates.lat, this.cottage.coordinates.lon);
-      this.mapOptions.zoom = 13;
-
-      setTimeout(() => {
-        if(this.map) {
-          const marker = L.marker([this.cottage.coordinates.lat, this.cottage.coordinates.lon]).bindPopup(this.cottage.name);
-          marker.addTo(this.map);
-          this.map.panTo(new L.LatLng(this.cottage.coordinates.lat, this.cottage.coordinates.lon));
-        }
-      }, 100);
-    }
-  }
   onMapReady(map: L.Map) {
     this.map = map;
-    if(this.cottage) {
-      this.initializeMap();
+    this.setupMap();
+  }
+
+  setupMap(): void {
+    if(this.cottage && this.map) {
+      const coords = L.latLng(this.cottage.coordinates.lat, this.cottage.coordinates.lon);
+      this.map.setView(coords, 13);
+      L.marker(coords).addTo(this.map).bindPopup(this.cottage.name);
+
+      this.resizeObserver = new ResizeObserver(() => {
+        if(this.map) {
+          this.map.invalidateSize();
+        }
+      });
+
+      this.resizeObserver.observe(this.mapContainer.nativeElement);
+    }
+  }
+
+  ngOnDestroy(): void {
+    if(this.resizeObserver) {
+      this.resizeObserver.disconnect();
     }
   }
 
