@@ -7,15 +7,18 @@ interface AuthRequest extends Request {
 
 export const checkAuth = (req: AuthRequest, res: Response, next: NextFunction) => {
     try {
-        const token = req.headers.authorization?.split(" ")[1]; // "Bearer TOKEN"
-        if(token) {
-            const decodedToken = jwt.verify(token, 'SUPER_SECRET_KEY');
-            req.userData = {id: (decodedToken as any).id, userType: (decodedToken as any).userType};
-            next();
-        } else {
-            return res.status(404).json({message: "Token not found."});
+        const authHeader = req.headers.authorization;
+        if(!authHeader || !authHeader.startsWith('Bearer ')) {
+            return res.status(401).json({message: "Authentication failed: No token provided."});
         }
+
+        const token = authHeader.split(" ")[1];
+
+        const decodedToken = jwt.verify(token, 'SUPER_SECRET_KEY');
+        req.userData = {id: (decodedToken as any).id, userType: (decodedToken as any).userType};
+
+        next();
     } catch(error) {
-        return res.status(401).json({message: "Authentication failed."});
+        return res.status(401).json({message: "Authentication failed: Invalid token."});
     }
 }

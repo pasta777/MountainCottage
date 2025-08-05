@@ -2,12 +2,21 @@
     <h2>My Cottages</h2>
     <button routerLink="/add-cottage">Add New Cottage</button>
 
-    <div *ngFor="let v of myCottages" class="cottage-card">
-        <h3>{{ v.name }}</h3>
-        <p>{{ v.location }}</p>
-        <div>
-            <button [routerLink]="['/modify-cottage', v._id]">Modify</button>
-            <button (click)="onDelete(v._id)">Delete</button>
+    <div *ngIf="myCottages.length > 0; else noCottages" class="cottages-grid">
+        <div *ngFor="let c of myCottages" class="cottage-card">
+            <h3>{{ c.name }}</h3>
+            <p>{{ c.location }}</p>
+            <div>
+                <button [routerLink]="['/modify-cottage', c._id]">Modify</button>
+                <button (click)="onDelete(c._id)">Delete</button>
+            </div>
         </div>
     </div>
+
+    <ng-template #noCottages>
+        <div class="no-cottages-message">
+            <p>You have no cottages.</p>
+            <p>Click on a button "Add New Cottage" to add your first one.</p>
+        </div>
+    </ng-template>
 </div>

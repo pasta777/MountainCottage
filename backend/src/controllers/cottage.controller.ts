@@ -43,6 +43,9 @@ export const getCottageDetails = async (req: Request, res: Response) => {
 
 export const getMyCottages = async (req: any, res: Response) => {
     try {
+        if(req.userData.userType !== 'owner') {
+            return res.status(403).json({message: "Only owners can access this page."});
+        }
         const cottages = await Cottage.find({ownerId: req.userData.id});
         res.status(200).json(cottages);
     } catch(error) {
