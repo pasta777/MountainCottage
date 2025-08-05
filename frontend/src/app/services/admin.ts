@@ -1,6 +1,5 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Auth } from './auth';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -9,48 +8,41 @@ import { Observable } from 'rxjs';
 export class Admin {
   private apiUrl = 'http://localhost:3000/api/admin';
 
-  constructor(private http: HttpClient, private authService: Auth) {}
-
-  private getAuthHeaders(): HttpHeaders {
-    const token = this.authService.getAdminToken();
-    return new HttpHeaders({
-      'Authorization': `Bearer ${token}`
-    });
-  }
+  constructor(private http: HttpClient) {}
 
   getRegistrationRequests(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/registration-requests`, {headers: this.getAuthHeaders()});
+    return this.http.get<any[]>(`${this.apiUrl}/registration-requests`);
   }
 
   approveRequest(userId: string): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/approve-request/${userId}`, {}, {headers: this.getAuthHeaders()});
+    return this.http.post<any>(`${this.apiUrl}/approve-request/${userId}`, {});
   }
 
   rejectRequest(userId: string): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/reject-request/${userId}`, {}, {headers: this.getAuthHeaders()});
+    return this.http.post<any>(`${this.apiUrl}/reject-request/${userId}`, {});
   }
 
   getAllUsers(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/users`, {headers: this.getAuthHeaders()});
+    return this.http.get<any[]>(`${this.apiUrl}/users`);
   }
 
   toggleUserStatus(userId: string): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/users/${userId}/toggle-status`, {}, {headers: this.getAuthHeaders()});
+    return this.http.post<any>(`${this.apiUrl}/users/${userId}/toggle-status`, {});
   }
 
   deleteUser(userId: string): Observable<any> {
-    return this.http.delete<any>(`${this.apiUrl}/users/${userId}`, {headers: this.getAuthHeaders()});
+    return this.http.delete<any>(`${this.apiUrl}/users/${userId}`);
   }
 
   updateUser(userId: string, userData: any): Observable<any> {
-    return this.http.put<any>(`${this.apiUrl}/users/${userId}`, userData, {headers: this.getAuthHeaders()});
+    return this.http.put<any>(`${this.apiUrl}/users/${userId}`, userData);
   }
 
   getAllCottages(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/cottages`, {headers: this.getAuthHeaders()});
+    return this.http.get<any[]>(`${this.apiUrl}/cottages`);
   }
 
   blockCottage(id: string): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/cottages/${id}/block`, {}, {headers: this.getAuthHeaders()});
+    return this.http.post<any>(`${this.apiUrl}/cottages/${id}/block`, {});
   }
 }

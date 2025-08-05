@@ -1,7 +1,6 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Auth } from './auth';
 
 @Injectable({
   providedIn: 'root'
@@ -9,19 +8,13 @@ import { Auth } from './auth';
 export class Review {
   private apiUrl = 'http://localhost:3000/api/reviews';
 
-  constructor(private http: HttpClient, private authService: Auth) {}
-
-  private getAuthHeaders(): HttpHeaders {
-    return new HttpHeaders({
-      'Authorization': `Bearer ${this.authService.getActiveToken()}`
-    });
-  }
+  constructor(private http: HttpClient) {}
 
   getReviewsForCottage(cottageId: string): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/cottage/${cottageId}`);
   }
 
   addReview(data: {cottageId: string, reservationId: string, rating: number, comment: string}): Observable<any> {
-    return this.http.post<any>(this.apiUrl, data, {headers: this.getAuthHeaders()});
+    return this.http.post<any>(this.apiUrl, data);
   }
 }

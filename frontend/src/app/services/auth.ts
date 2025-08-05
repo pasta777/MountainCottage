@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 import { Router } from '@angular/router';
 
@@ -36,13 +36,7 @@ export class Auth {
   }
 
   changePassword(passwordData: any): Observable<any> {
-    const token = this.getUserToken();
-
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`
-    });
-
-    return this.http.post<any>(`${this.apiUrl}/change-password`, passwordData, {headers: headers});
+    return this.http.post<any>(`${this.apiUrl}/change-password`, passwordData);
   }
 
   logout(): void {
