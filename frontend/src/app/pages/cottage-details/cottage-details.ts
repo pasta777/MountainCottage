@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { LeafletModule } from '@bluehalo/ngx-leaflet'; // Proverite da li je putanja ispravna
+import { LeafletModule } from '@bluehalo/ngx-leaflet';
 import * as L from 'leaflet';
 import { Cottage } from '../../services/cottage';
 import { Review } from '../../services/review';
@@ -20,7 +20,6 @@ export class CottageDetails implements OnInit {
   reviews: any[] = [];
   map: L.Map | undefined;
   
-  // Opcije za mapu, uključujući i tile layer
   mapOptions: L.MapOptions = {
     layers: [
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -63,7 +62,6 @@ export class CottageDetails implements OnInit {
     if (id) {
       this.cottageService.getCottageById(id).subscribe(data => {
         this.cottage = data;
-        // Pokušavamo da postavimo marker samo ako je mapa već spremna
         if (this.map) {
           this.setupMapMarker();
         }
@@ -77,23 +75,18 @@ export class CottageDetails implements OnInit {
     }
   }
   
-  // Ova funkcija se poziva kada je mapa spremna
   onMapReady(map: L.Map): void {
     this.map = map;
 
-    // KLJUČNI DEO ZA ISPRAVKU "ISECKANE" MAPE
-    // Dajemo mapi trenutak da se renderuje, a onda je osvežavamo
     setTimeout(() => {
       map.invalidateSize();
     }, 0);
     
-    // Ako su podaci o vikendici već stigli, postavljamo marker
     if (this.cottage) {
       this.setupMapMarker();
     }
   }
   
-  // Funkcija koja postavlja marker na mapu
   setupMapMarker(): void {
     if (!this.map || !this.cottage) {
       return;
@@ -101,23 +94,10 @@ export class CottageDetails implements OnInit {
 
     const coords = L.latLng(this.cottage.coordinates.lat, this.cottage.coordinates.lon);
 
-    // KREIRANJE IKONICE SA LINKOVIMA SA INTERNETA (CDN)
-    const customIcon = L.icon({
-      iconUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png',
-      iconRetinaUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon-2x.png',
-      shadowUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png',
-      iconSize: [25, 41],
-      iconAnchor: [12, 41],
-      popupAnchor: [1, -34],
-      shadowSize: [41, 41]
-    });
-
-    // Centriramo mapu i dodajemo marker sa novom ikonicom
     this.map.setView(coords, 13);
-    L.marker(coords, { icon: customIcon }).addTo(this.map).bindPopup(this.cottage.name);
+    L.marker(coords).addTo(this.map).bindPopup(this.cottage.name);
   }
 
-  // --- Ostatak vaše logike za formu ---
   nextStep(): void {
     if (this.reservationForm.get('startDate')?.valid && this.reservationForm.get('endDate')?.valid) {
       this.calculatePrice();
