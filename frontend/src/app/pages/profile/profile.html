@@ -6,6 +6,24 @@
             <div class="form-group">
                 <label for="profilePicture">Change Profile Picture</label>
                 <input type="file" id="profilePicture" (change)="onFileSelected($event)">
+
+                <div *ngIf="profileForm.get('profilePicture')?.errors && profileForm.get('profilePicture')?.touched" class="error">
+                    <small *ngIf="profileForm.get('profilePicture')?.errors?.['pictureType']">
+                        Only JPG and PNG formats are allowed.
+                    </small>
+                    <small *ngIf="profileForm.get('profilePicture')?.errors?.['minDimensions']">
+                        Picture is too small. Minimum dimensions are 100x100px.
+                    </small>
+                    <small *ngIf="profileForm.get('profilePicture')?.errors?.['maxDimensions']">
+                        Picture is too big. Maximum dimensions are 300x300px.
+                    </small>
+                    <small *ngIf="profileForm.get('profilePicture')?.errors?.['invalidPicture']">
+                        The choosen file is invalid.
+                    </small>
+                </div>
+                <div *ngIf="profileForm.get('profilePictre')?.pending">
+                    <small>Checking the picture...</small>
+                </div>
             </div>
         </div>
 
