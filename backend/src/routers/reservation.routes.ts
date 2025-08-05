@@ -13,4 +13,4 @@ router.post('/:id/cancel', checkAuth, reservationController.cancelReservation);
 
 export default router;
 
-// resevations
+// reservations
