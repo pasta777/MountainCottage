@@ -1,6 +1,10 @@
 .details-container {
     max-width: 1200px;
     margin: 2rem auto;
+    padding: 0;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
 .headers {
@@ -9,7 +13,6 @@
     padding: 2rem;
     background-color: var(--primary-color);
     color: white;
-    border-radius: 8px 8px 0 0;
 }
 
 .headers h1 {
@@ -20,6 +23,7 @@
 .headers p {
     font-size: 1.1rem;
     color: #eee;
+    margin-top: 0.5rem;
 }
 
 .gallery {
@@ -28,31 +32,34 @@
 
 .picture-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     gap: 1rem;
 }
 
 .picture-grid img {
     width: 100%;
-    height: 200px;
+    height: 220px;
     object-fit: cover;
     border-radius: 8px;
-    transition: transform 0.3s ease;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+    border: 1px solid #ddd;
 }
 
 .picture-grid img:hover {
     transform: scale(1.05);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
 }
 
 .main-content {
     display: grid;
     grid-template-columns: 2fr 1fr;
-    gap: 2rem;
-    padding: 0 2rem;
+    gap: 2.5rem;
+    padding: 2rem;
 }
 
 .info-section {
-    margin-bottom: 2rem;
+    margin-bottom: 2.5rem;
 }
 
 .info-section h2, .gallery h2 {
@@ -66,9 +73,15 @@
     background-color: #f9f9f9;
     padding: 2rem;
     border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     position: sticky;
     top: 90px;
+}
+
+.booking-form h2 {
+    text-align: center;
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+    color: var(--primary-color);
 }
 
 .booking-form .form-group {
@@ -93,6 +106,8 @@
 .comments {
     padding: 2rem;
     margin-top: 2rem;
+    background-color: #f8f9fa;
+    border-top: 1px solid #eee;
 }
 
 .comments h2 {

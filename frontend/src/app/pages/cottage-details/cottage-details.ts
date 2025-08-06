@@ -8,10 +8,11 @@ import { Cottage } from '../../services/cottage';
 import { Review } from '../../services/review';
 import { Reservation } from '../../services/reservation';
 import { User } from '../../services/user';
+import { Lightbox, LightboxModule } from 'ngx-lightbox'
 
 @Component({
   selector: 'app-cottage-details',
-  imports: [CommonModule, ReactiveFormsModule, LeafletModule],
+  imports: [CommonModule, ReactiveFormsModule, LeafletModule, LightboxModule],
   templateUrl: './cottage-details.html',
   styleUrls: ['./cottage-details.css']
 })
@@ -19,6 +20,8 @@ export class CottageDetails implements OnInit {
   cottage: any;
   reviews: any[] = [];
   map: L.Map | undefined;
+
+  album: any[] = [];
   
   mapOptions: L.MapOptions = {
     layers: [
@@ -43,7 +46,8 @@ export class CottageDetails implements OnInit {
     private reviewService: Review,
     private reservationService: Reservation,
     private userService: User,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private lightbox: Lightbox
   ) {
     this.reservationForm = this.fb.group({
       startDate: ['', Validators.required],
@@ -65,6 +69,15 @@ export class CottageDetails implements OnInit {
         if (this.map) {
           this.setupMapMarker();
         }
+        if(data.pictures && data.pictures.length > 0) {
+          this.album = data.pictures.map((picture: string) => {
+            return {
+              src: `http://localhost:3000/${picture}`,
+              caption: data.name,
+              thumb: `http://localhost:3000/${picture}`
+            }
+          });
+        }
       });
       this.reviewService.getReviewsForCottage(id).subscribe(data => {
         this.reviews = data;
@@ -73,6 +86,10 @@ export class CottageDetails implements OnInit {
         this.reservationForm.patchValue({ cardNumber: user.creditCardNumber });
       });
     }
+  }
+
+  openLightbox(index: number): void {
+    this.lightbox.open(this.album, index);
   }
   
   onMapReady(map: L.Map): void {
