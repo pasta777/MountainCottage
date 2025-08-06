@@ -10,6 +10,9 @@ import cottageRoutes from './src/routers/cottage.routes';
 import reservationRoutes from './src/routers/reservation.routes';
 import reviewRoutes from './src/routers/review.routes';
 import statsRoutes from './src/routers/stats.routes';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const app: Express = express();
 const port: number = 3000;

@@ -14,7 +14,7 @@ export const checkAuth = (req: AuthRequest, res: Response, next: NextFunction) =
 
         const token = authHeader.split(" ")[1];
 
-        const decodedToken = jwt.verify(token, 'SUPER_SECRET_KEY');
+        const decodedToken = jwt.verify(token, process.env.SECRET_KEY as string);
         req.userData = {id: (decodedToken as any).id, userType: (decodedToken as any).userType};
 
         next();

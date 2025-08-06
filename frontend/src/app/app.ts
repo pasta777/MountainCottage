@@ -13,7 +13,9 @@ import { jwtDecode } from 'jwt-decode';
 export class App {
   title = 'Mountain Cottage';
 
-  constructor(public authService: Auth, private router: Router) {}
+  constructor(public authService: Auth, private router: Router) {
+    this.authService.autoLogin();
+  }
 
   getUserRole(): string | null {
     const token = this.authService.getActiveToken();
