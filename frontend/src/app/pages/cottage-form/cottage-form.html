@@ -48,6 +48,16 @@
             </div>
         </div>
 
+        <div *ngIf="editMode && existingPictures.length > 0" class="existing-pictures">
+            <h4>Existing Pictures</h4>
+            <div class="picture-grid">
+                <div *ngFor="let pic of existingPictures" class="picture-item">
+                    <img [src]="'http://localhost:3000/' + pic" [alt]="cottageForm.value.name">
+                    <button type="button" class="delete-pic-btn" (click)="onDeletePicture(pic)">X</button>
+                </div>
+            </div>
+        </div>
+
         <div class="form-group">
             <label for="pictures">Pictures (limited to 10)</label>
             <input type="file" id="pictures" (change)="onFileSelected($event)" multiple>

@@ -33,4 +33,8 @@ export class Cottage {
   deleteCottage(id: string): Observable<any> {
     return this.http.delete<any>(`${this.apiUrl}/${id}`);
   }
+
+  deletePicture(id: string, picturePath: string): Observable<any> {
+    return this.http.delete<any>(`${this.apiUrl}/${id}/pictures`, {body: {picturePath}});
+  }
 }

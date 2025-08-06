@@ -9,6 +9,8 @@ import { Review } from '../../services/review';
 import { Reservation } from '../../services/reservation';
 import { User } from '../../services/user';
 import { Lightbox, LightboxModule } from 'ngx-lightbox'
+import { Auth } from '../../services/auth';
+import { jwtDecode } from 'jwt-decode';
 
 @Component({
   selector: 'app-cottage-details',
@@ -22,6 +24,8 @@ export class CottageDetails implements OnInit {
   map: L.Map | undefined;
 
   album: any[] = [];
+
+  isTourist: boolean = false;
   
   mapOptions: L.MapOptions = {
     layers: [
@@ -47,7 +51,8 @@ export class CottageDetails implements OnInit {
     private reservationService: Reservation,
     private userService: User,
     private fb: FormBuilder,
-    private lightbox: Lightbox
+    private lightbox: Lightbox,
+    private authService: Auth
   ) {
     this.reservationForm = this.fb.group({
       startDate: ['', Validators.required],
@@ -62,6 +67,8 @@ export class CottageDetails implements OnInit {
   }
 
   ngOnInit(): void {
+    this.checkUserRole();
+
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
       this.cottageService.getCottageById(id).subscribe(data => {
@@ -85,6 +92,21 @@ export class CottageDetails implements OnInit {
       this.userService.getProfile().subscribe(user => {
         this.reservationForm.patchValue({ cardNumber: user.creditCardNumber });
       });
+    }
+  }
+
+  checkUserRole(): void {
+    const token = this.authService.getActiveToken();
+    if(token) {
+      try {
+        const decodedToken: any = jwtDecode(token);
+        if(decodedToken.userType === 'tourist') {
+          this.isTourist = true;
+        }
+      } catch(error) {
+        console.error("Error decoding token.", error);
+        this.isTourist = false;
+      }
     }
   }
 

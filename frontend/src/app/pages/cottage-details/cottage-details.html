@@ -15,7 +15,7 @@
         </div>
     </section>
 
-    <div class="main-content">
+    <div class="main-content" [style.grid-template-columns]="isTourist ? '2fr 1fr' : '1fr'">
         <div class="info-column">
             <section class="info-section">
                 <h2>Services</h2>
@@ -32,7 +32,7 @@
                 <div #mapContainer class="map-container" leaflet [leafletOptions]="mapOptions" (leafletMapReady)="onMapReady($event)"></div>
             </section>
         </div>
-        <div class="booking-column">
+        <div *ngIf="isTourist" class="booking-column">
             <section class="booking-form">
                 <h2>Book!</h2>
                 <form [formGroup]="reservationForm">

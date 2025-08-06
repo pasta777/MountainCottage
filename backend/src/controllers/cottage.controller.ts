@@ -65,6 +65,12 @@ export const updateCottage = async (req: any, res: Response) => {
         }
 
         const data = req.body;
+        const picturesFiles = req.files as Express.Multer.File[];
+
+        if(picturesFiles && picturesFiles.length > 0) {
+            const newPicturesPaths = picturesFiles.map(file => file.path);
+            data.pictures = [...cottage.pictures, ...newPicturesPaths];
+        }
 
         const updatedCottage = await Cottage.findByIdAndUpdate(req.params.id, data, {new: true});
         res.status(200).json(updatedCottage);
@@ -119,4 +125,33 @@ export const deleteCottage = async (req: any, res: Response) => {
     } catch(error) {
         res.status(500).json({message: "Server error."});
     }
-}
+};
+
+export const deletePicture = async (req: any, res: Response) => {
+    try {
+        const { id } = req.params;
+        const { picturePath } = req.body;
+
+        const cottage = await Cottage.findById(id);
+        if(!cottage) {
+            return res.status(404).json({message: "Cottage not found."});
+        }
+        if(cottage.ownerId.toString() !== req.userData.id) {
+            return res.status(403).json({message: "Permission denied."});
+        }
+
+        cottage.pictures = cottage.pictures.filter(p => p !== picturePath);
+        await cottage.save();
+
+        const fullPath = path.join(__dirname, '..', '..', picturePath);
+        fs.unlink(fullPath, (err) => {
+            if(err) {
+                console.error(`Error while deleting file ${fullPath}: `, err);
+            }
+        });
+
+        res.status(200).json({message: "Picture deleted successfully.", pictures: cottage.pictures});
+    } catch(error) {
+        res.status(500).json({message: "Server error."});
+    }
+};

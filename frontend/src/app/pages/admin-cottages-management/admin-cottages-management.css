@@ -18,6 +18,19 @@ h1 {
     color: #856404;
 }
 
+td a {
+    text-decoration: none;
+    color: var(--primary-color);
+    font-weight: bold;
+    display: inline-block;
+    transition: transform 0.3s ease;
+}
+
+td a:hover {
+    text-decoration: underline;
+    transform: scale(1.05);
+}
+
 td button {
     background-color: #ffc107;
     color: #212529;

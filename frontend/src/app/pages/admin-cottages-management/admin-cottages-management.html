@@ -14,7 +14,7 @@
         </thead>
         <tbody>
             <tr *ngFor="let c of cottages" [ngClass]="{'problematic': c.haveToColor}">
-                <td>{{ c.name }}</td>
+                <td><a [routerLink]="['/cottage', c._id]">{{ c.name }}</a></td>
                 <td>{{ c.location }}</td>
                 <td>{{ c.ownerId.name }} {{ c.ownerId.surname }}</td>
                 <td>{{ c.averageRating.toFixed(1) }} / 5</td>

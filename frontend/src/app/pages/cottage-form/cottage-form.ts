@@ -15,6 +15,7 @@ export class CottageForm implements OnInit {
   editMode = false;
   private cottageId: string | null = null;
   selectedFiles: File[] = [];
+  existingPictures: string[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -57,7 +58,16 @@ export class CottageForm implements OnInit {
         lat: data.coordinates.lat,
         lon: data.coordinates.lon
       });
+      this.existingPictures = data.pictures;
     });
+  }
+
+  onDeletePicture(picturePath: string): void {
+    if(confirm("Are you sure you want to delete this picture?") && this.cottageId) {
+      this.cottageService.deletePicture(this.cottageId, picturePath).subscribe(response => {
+        this.existingPictures = response.pictures;
+      });
+    }
   }
 
   onJsonFileSelected(event: any): void {

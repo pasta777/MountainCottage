@@ -13,6 +13,7 @@ router.get('/:id', cottageController.getCottageDetails);
 router.put('/:id', checkAuth, cottageUpload.array('pictures', 10), cottageController.updateCottage);
 router.post('/', checkAuth, cottageUpload.array('pictures', 10), cottageController.createCottage);
 router.delete('/:id', checkAuth, cottageController.deleteCottage);
+router.delete('/:id/pictures', checkAuth, cottageController.deletePicture);
 
 export default router;
 

@@ -4,7 +4,7 @@
 
     <div *ngIf="myCottages.length > 0; else noCottages" class="cottages-grid">
         <div *ngFor="let c of myCottages" class="cottage-card">
-            <h3>{{ c.name }}</h3>
+            <a [routerLink]="['/cottage', c._id]">{{ c.name }}</a>
             <p>{{ c.location }}</p>
             <div>
                 <button [routerLink]="['/modify-cottage', c._id]">Modify</button>

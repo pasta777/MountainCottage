@@ -33,9 +33,19 @@
     box-shadow: 0 6px 12px rgba(0,0,0,0.15);
 }
 
-.cottage-card h3 {
+.cottage-card a {
     margin-top: 0;
     color: var(--primary-color);
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1.25rem;
+    transition: transform 0.3s ease;
+    display: inline-block;
+}
+
+.cottage-card a:hover {
+    text-decoration: underline;
+    transform: scale(1.05);
 }
 
 .cottage-card p {
