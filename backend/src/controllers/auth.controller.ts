@@ -90,7 +90,7 @@ export const adminLogin = async (req: Request, res: Response) => {
     
         const token = jwt.sign(
             {id: admin._id, username: admin.username, userType: admin.userType},
-            'SUPER_SECRET_KEY',
+            process.env.SECRET_KEY as string,
             {expiresIn: '3h'}
         );
     

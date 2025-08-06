@@ -1,0 +1,59 @@
+.container h2 {
+    text-align: center;
+    color: var(--primary-color);
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+}
+
+.container > button {
+    display: block;
+    margin: 0 auto 2.5rem auto;
+    padding: 0.8rem 2rem;
+    font-size: 1.1rem;
+}
+
+.cottages-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1));
+    gap: 1.5rem;
+}
+
+.cottage-card {
+    background-color: white;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    flex-direction: column;
+    justify-content: space-between;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.cottage-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+}
+
+.cottage-card h3 {
+    margin-top: 0;
+    color: var(--primary-color);
+}
+
+.cottage-card p {
+    color: #666;
+    margin-bottom: 1.5rem;
+}
+
+.cottage-card div {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.no-cottages-message {
+    text-align: center;
+    margin-top: 4rem;
+    padding: 2rem;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    color: #666;
+    font-size: 1.1rem;
+}

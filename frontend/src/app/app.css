@@ -1,40 +1,59 @@
 .main-header {
     background-color: var(--primary-color);
     color: white;
+    padding: 0 rem;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
 }
 
 .main-nav {
     max-width: var(--MXW);
     margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 70px;
 }
 
-.main-nav a {
-    color: white;
+.logo {
+    font-size: 1.8rem;
+    font-weight: bold;
     text-decoration: none;
-    padding: 8px;
+    color: white;
 }
 
 .main-nav ul {
     list-style: none;
-    float: right;
-    padding: 8px;
-}
-
-.main-nav ul li {
-    display: inline;
-    float: left;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: 0.5rem;
 }
 
 .main-nav ul li a {
     display: block;
+    padding: 0.75rem 1rem;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
 }
 
-.logo {
-    font-size: 2.5rem;
-    font-weight: bold;
+.main-nav ul li a:hover, .main-nav ul li a.active-link {
+    background-color: rgba(255,255,255,0.15);
 }
 
 .main-footer {
     background-color: var(--special-color);
     color: white;
+    text-align: center;
+    padding: 2rem 1rem;
+    margin-top: 2rem;
+}
+
+.main-footer p {
+    margin: 0;
+    font-size: 0.9rem;
 }

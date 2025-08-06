@@ -96,7 +96,7 @@ export class Register implements OnInit {
       return 'mastercard';
     }
 
-    const visaPrefixes = ['4539', '4556', '4916', '4532', '4929', '4485', '4716'];
+    const visaPrefixes = ['4539', '4556', '4916', '4532', '4929', '4485', '4716', '4841'];
     if(visaPrefixes.some(prefix => cardNumber.startsWith(prefix)) && cardNumber.length == 16) {
       return 'visa';
     }

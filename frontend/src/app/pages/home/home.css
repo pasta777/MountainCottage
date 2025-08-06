@@ -1,24 +1,11 @@
-h1 {
-    color: white;
-    font-size: 4rem;
-    padding: 2rem;
-}
-
-h2 {
-    color: white;
-    text-align: center;
-    background-color: var(--secondary-color);
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 8px;
-}
-
 #home {
     background-image: url('/assets/pictures/mountain-cottage-1.jpg');
     background-size: cover;
     background-position: center;
     position: relative;
-    padding-bottom: 40px;
+    padding: 4rem 2rem;
+    text-align: center;
+    color: white;
 }
 
 #home::before {
@@ -28,63 +15,84 @@ h2 {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.91);
+    background-color: rgba(0, 0, 0, 0.6);
     z-index: 0;
 }
 
-#home h1, .stats-grid {
+#home > * {
     position: relative;
-    z-index: 1;
+    z-index: 2;
+}
+
+#home h1 {
+    font-size: 3.5rem;
+    margin-bottom: 2rem;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    color: white;
 }
 
 .stats-grid {
-    color: white;
     display: flex;
     flex-wrap: wrap;
-    flex-direction: row;
     justify-content: center;
-    max-width: 1200px;
-    margin: 0 auto;
+    gap: 1.5rem;
+    max-width: var(--MXW);
+    margin: 2rem auto 0;
 }
 
 .stat-card {
+    background-color: rgba(0,0,0,0.4);
+    padding: 1.5rem;
+    border-radius: 8px;
     text-align: center;
-    font-weight: bold;
-    padding: 12px;
-    margin: 15px;
-    width: 20%;
+    width: 200px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transition: transform 0.3s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
 }
 
 .stat-card h3 {
-    font-size: 2rem;
+    font-size: 2.5rem;
+    color: #fff;
+    margin: 0;
+}
+
+.stat-card p {
+    font-size: 1rem;
+    color: #eee;
+    margin-top: 0.5rem;
 }
 
 .cottage-section {
-    background-color: var(--secondary-color);
-    position: relative;
+    padding: 2rem;
+    max-width: var(--MXW);
+    margin: 2rem auto;
+}
+
+.cottage-section h2 {
+    text-align: center;
+    font-size: 2.5rem;
+    color: var(--primary-color);
+    margin-bottom: 2rem;
 }
 
 .search-form {
-    text-align: center;
-    position: absolute;
-    left: 50%;
-    top: 0;
-    transform: translate(-50%, -50%);
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
 }
 
-.search-form input, .search-form button {
-    padding: 8px;
-    border-color: var(--secondary-color);
-    border-width: 4px;
-    border-style: solid;
-    transition: 0.5s;
+.search-form input {
+    width: 300px;
 }
 
-.search-form input:hover, .search-form button:hover {
-    border-style: dashed;
-}
-
-.search-form input:focus, .search-form button:focus {
-    border-color: var(--special-color);
-    border-style: dashed;
+.cottage-section table {
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    border-radius: 8px;
+    overflow: hidden;
 }

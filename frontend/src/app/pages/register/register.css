@@ -1,10 +1,33 @@
-.input-with-icons {
+.register-container {
+    max-width: 700px;
+    margin: 3rem auto;
+    padding: 2.5rem;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.register-container h2 {
+    text-align: center;
+    color: var(--primary-color);
+    margin-bottom: 2rem;
+    font-size: 2.5rem;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="email"],
+select {
+    margin-bottom: 1rem;
+}
+
+.input-with-icon {
     position: relative;
     display: flex;
     align-items: center;
 }
 
-.input-with-icons input {
+.input-with-icon input {
     width: 100%;
     padding-right: 40px;
 }
@@ -12,10 +35,45 @@
 .card-icon {
     position: absolute;
     right: 10px;
-    height: 24px;
+    height: 30px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
 }
 
 .card-icon img {
     height: 100%;
     width: auto;
+}
+
+.form-group input[type="file"] {
+    border: 1px dashed #ccc;
+    padding: 1rem;
+    cursor: pointer;
+    margin-top: 0.5rem;
+}
+
+.form-group input[type="file"]:hover {
+    border-color: var(--primary-color);
+}
+
+.error {
+    color: var(--cancel-color);
+    font-size: 0.875rem;
+    margin-top: -0.8rem;
+    margin-bottom: 1rem;
+}
+
+button[type="submit"] {
+    width: 100%;
+    padding: 1rem;
+    font-size: 1.1rem;
+    margin-top: 1.5rem;
+}
+
+.success-message, .error-message {
+    text-align: center;
+    padding: 1rem;
+    border-radius: 4px;
+    margin-top: 1.5rem;
 }

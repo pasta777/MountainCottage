@@ -1,0 +1,90 @@
+.container {
+    max-width: 1100px;
+}
+
+.container h1 {
+    text-align: center;
+    color: var(--primary-color);
+    font-size: 2.5rem;
+    margin-bottom: 3rem;
+}
+
+.reservation-list {
+    margin-bottom: 3rem;
+}
+
+.reservation-list h2 {
+    font-size: 1.8rem;
+    color: var(--secondary-color);
+    margin-bottom: 1.5rem;
+}
+
+.reservation-list p {
+    text-align: center;
+    color: #666;
+    font-size: 1.1rem;
+    padding: 2rem;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+}
+
+.calendar-section {
+    margin-top: 3rem;
+    padding: 2rem;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.calendar-section h2 {
+    text-align: center;
+    font-size: 2rem;
+    color: var(--primary-color);
+    margin-bottom: 2rem;
+}
+
+:host ::ng-deep .fc {
+    font-family: inherit;
+    border: none;
+}
+
+:host ::ng-deep .fc-toolbar-title {
+    color: var(--primary-color);
+}
+
+:host ::ng-deep .fc-button-primary {
+    background-color: var(--primary-color) !important;
+    border-color: var(--primary-color) !important;
+}
+
+:host ::ng-deep .fc-button-primary:hover {
+    background-color: var(--primary-color-hover) !important;
+}
+
+:host ::ng-deep .fc-col-header-cell {
+    background-color: var(--primary-color);
+}   
+
+:host ::ng-deep .fc-col-header-cell:hover {
+    background-color: var(--primary-color-hover);
+}
+
+:host ::ng-deep .fc-view-harness {
+    height: 650px !important;
+    overflow-y: auto !important;
+    border: 1px solid #ddd;
+    border-top: none;
+    border-radius: 0 0 8px 8px;
+}
+
+:host ::ng-deep .fc-scroller {
+    overflow: hidden !important;
+}
+
+:host ::ng-deep .fc-daygrid-event {
+    cursor: pointer;
+}
+
+:host ::ng-deep .fc-event-main {
+    padding: 2px 5px;
+}

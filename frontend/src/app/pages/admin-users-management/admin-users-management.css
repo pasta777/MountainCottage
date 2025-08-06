@@ -1,0 +1,19 @@
+h1 {
+    font-size: 2.5rem;
+    color: var(--primary-color);
+    text-align: center;
+    margin-bottom: 2.5rem;
+}
+
+.inactive {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+.problematic {
+    background-color: #fff3cd;
+}
+
+td button {
+    margin-right: 0.5rem;
+}

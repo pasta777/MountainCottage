@@ -3,12 +3,14 @@
 
     <table>
         <thead>
-            <tr>Name</tr>
-            <tr>Username</tr>
-            <tr>Email</tr>
-            <tr>Type</tr>
-            <tr>Status</tr>
-            <tr>Actions</tr>
+            <tr>
+                <th>Name</th>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Type</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
         </thead>
         <tbody>
             <tr *ngFor="let u of users" [ngClass]="{'inactive': u.status === 'inactive'}">
