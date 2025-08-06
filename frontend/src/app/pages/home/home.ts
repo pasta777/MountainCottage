@@ -2,10 +2,12 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Public } from '../../services/public';
+import { Auth } from '../../services/auth';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-home',
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink],
   templateUrl: './home.html',
   styleUrl: './home.css'
 })
@@ -17,7 +19,11 @@ export class Home implements OnInit {
   sortBy: string = 'name';
   sortOrder: 'asc' | 'desc' = 'asc';
 
-  constructor(private publicService: Public, private fb: FormBuilder) {
+  constructor(
+    private publicService: Public,
+    public authService: Auth,
+    private fb: FormBuilder,
+  ) {
     this.searchForm = this.fb.group({
       name: [''],
       location: ['']

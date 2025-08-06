@@ -55,7 +55,10 @@
             </thead>
             <tbody>
                 <tr *ngFor="let c of cottages">
-                    <td>{{ c.name }}</td>
+                    <td>
+                        <a *ngIf="authService.isLoggedIn()" [routerLink]="['/cottage', c._id]">{{ c.name }}</a>
+                        <span *ngIf="!authService.isLoggedIn()">{{ c.name }}</span>
+                    </td>
                     <td>{{ c.location }}</td>
                 </tr>
                 <tr *ngIf="cottages.length === 0">

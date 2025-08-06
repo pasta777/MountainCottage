@@ -96,3 +96,16 @@
     border-radius: 8px;
     overflow: hidden;
 }
+
+.cottage-section tbody tr a {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: bold;
+    display: inline-block;
+    transition: transform 0.2s ease;
+}
+
+.cottage-section tbody tr a:hover {
+    text-decoration: underline;
+    transform: scale(1.05);
+}
