@@ -1,27 +1,28 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Admin } from '../../services/admin';
 import { RouterLink } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { luhnValidator } from '../register/register';
+import { passwordRegex } from '../../validators/regex.validator';
+import { luhnValidator } from '../../validators/luhn.validator';
+import { Modal } from '../../shared/modal/modal';
 
 @Component({
   selector: 'app-admin-users-management',
-  imports: [CommonModule, RouterLink, ReactiveFormsModule],
+  imports: [CommonModule, RouterLink, ReactiveFormsModule, Modal],
   templateUrl: './admin-users-management.html',
   styleUrl: './admin-users-management.css'
 })
 export class AdminUsersManagement implements OnInit {
+  @ViewChild(Modal) addUserModal!: Modal;
+
   users: any[] = [];
-  isModalOpen = false;
   addUserForm!: FormGroup;
 
   constructor(private adminService: Admin, private fb: FormBuilder) {}
 
   ngOnInit(): void {
     this.loadUsers();
-
-    const passwordRegex = /^(?=.*[A-Z])(?=(?:.*[a-z]){3})(?=.*\d)(?=.*[\W_]).{6,10}$/;
 
     this.addUserForm = this.fb.group({
       name: ['', Validators.required],
@@ -44,12 +45,12 @@ export class AdminUsersManagement implements OnInit {
   }
 
   openAddUserModal(): void {
-    this.isModalOpen = true;
     this.addUserForm.reset({gender: 'M', userType: 'tourist'});
+    this.addUserModal.open();
   }
 
   closeAddUserModal(): void {
-    this.isModalOpen = false;
+    this.addUserModal.close();
   }
 
   onAddNewUser(): void {

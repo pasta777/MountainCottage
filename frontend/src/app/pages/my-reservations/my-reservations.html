@@ -51,30 +51,27 @@
             </tbody>
         </table>
     </section>
-
-    <div class="modal-overlay" *ngIf="reservationForReview">
-        <div class="modal-content">
-            <h3>Leave a review for the cottage "{{ reservationForReview.cottageId.name }}</h3>
-            <form [formGroup]="formForReview" (ngSubmit)="onSendReview()">
-                <div class="form-group">
-                    <label>Rating (1-5)</label>
-                    <select formControlName="rating">
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Comment</label>
-                    <textarea formControlName="comment" rows="4"></textarea>
-                </div>
-                <div class="button-group">
-                    <button type="button" (click)="reservationForReview = null">Back</button>
-                    <button type="submit" [disabled]="formForReview.invalid">Send</button>
-                </div>
-            </form>
-        </div>
-    </div>
 </div>
+
+<app-modal [title]="'Leave a Review'"> 
+    <form [formGroup]="formForReview" (ngSubmit)="onSendReview()">
+        <div class="form-group">
+            <label>Rating (1-5)</label>
+            <select formControlName="rating">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>Comment</label>
+            <textarea formControlName="comment" rows="4"></textarea>
+        </div>
+        <div class="button-group">
+            <button type="button" (click)="reservationForReview = null">Back</button>
+            <button type="submit" [disabled]="formForReview.invalid">Send</button>
+        </div>
+    </form>
+</app-modal>

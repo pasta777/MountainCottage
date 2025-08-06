@@ -34,59 +34,56 @@
     </table>
 </div>
 
-<div *ngIf="isModalOpen" class="modal-overlay">
-    <div class="modal-content">
-        <h2>Add New User</h2>
-        <form [formGroup]="addUserForm" (ngSubmit)="onAddNewUser()">
-            <div class="form-row">
-                <div class="form-group"><label>Name</label><input formControlName="name"></div>
-                <div class="form-group"><label>Surname</label><input formControlName="surname"></div>
-            </div>
-            <div class="form-row">
-                <div class="form-group"><label>Username</label><input formControlName="username"></div>
-                <div class="form-group">
-                    <label>Password</label>
-                    <input type="password" formControlName="password">
-                    <div *ngIf="addUserForm.get('password')?.invalid && addUserForm.get('password')?.touched" class="error-message">
-                        <small *ngIf="addUserForm.get('password')?.errors?.['pattern']">
-                            Password must have 6-10 characters, 1 uppercase, 3 lowercase, 1 number and 1 special character.
-                        </small>
-                    </div>
-                </div>
-            </div>
-            <div class="form-group"><label>Address</label><input formControlName="address"></div>
-            <div class="form-group"><label>Phone Number</label><input formControlName="phoneNumber"></div>
-            <div class="form-group"><label>Email</label><input type="email" formControlName="email"></div>
+<app-modal [title]="'Add New User'">
+    <form [formGroup]="addUserForm" (ngSubmit)="onAddNewUser()">
+        <div class="form-row">
+            <div class="form-group"><label>Name</label><input formControlName="name"></div>
+            <div class="form-group"><label>Surname</label><input formControlName="surname"></div>
+        </div>
+        <div class="form-row">
+            <div class="form-group"><label>Username</label><input formControlName="username"></div>
             <div class="form-group">
-                <label>Credit Card</label>
-                <input formControlName="creditCardNumber">
-                <div *ngIf="addUserForm.get('creditCardNumber')?.invalid && addUserForm.get('creditCardNumber')?.touched" class="error-message">
-                    <small *ngIf="addUserForm.get('creditCardNumber')?.errors?.['luhnInvalid']">
-                        The credit card number is invalid.
+                <label>Password</label>
+                <input type="password" formControlName="password">
+                <div *ngIf="addUserForm.get('password')?.invalid && addUserForm.get('password')?.touched" class="error-message">
+                    <small *ngIf="addUserForm.get('password')?.errors?.['pattern']">
+                        Password must have 6-10 characters, 1 uppercase, 3 lowercase, 1 number and 1 special character.
                     </small>
                 </div>
             </div>
-            <div class="form-row">
-                <div class="form-group">
-                    <label>Gender</label>
-                    <select formControlName="gender">
-                        <option value="M">Male</option>
-                        <option value="F">Female</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>User Type</label>
-                    <select formControlName="userType">
-                        <option value="tourist">Tourist</option>
-                        <option value="owner">Owner</option>
-                    </select>
-                </div>
+        </div>
+        <div class="form-group"><label>Address</label><input formControlName="address"></div>
+        <div class="form-group"><label>Phone Number</label><input formControlName="phoneNumber"></div>
+        <div class="form-group"><label>Email</label><input type="email" formControlName="email"></div>
+        <div class="form-group">
+            <label>Credit Card</label>
+            <input formControlName="creditCardNumber">
+            <div *ngIf="addUserForm.get('creditCardNumber')?.invalid && addUserForm.get('creditCardNumber')?.touched" class="error-message">
+                <small *ngIf="addUserForm.get('creditCardNumber')?.errors?.['luhnInvalid']">
+                    The credit card number is invalid.
+                </small>
             </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label>Gender</label>
+                <select formControlName="gender">
+                    <option value="M">Male</option>
+                    <option value="F">Female</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>User Type</label>
+                <select formControlName="userType">
+                    <option value="tourist">Tourist</option>
+                    <option value="owner">Owner</option>
+                </select>
+            </div>
+        </div>
 
-            <div class="button-group">
-                <button type="button" class="btn-secondary" (click)="closeAddUserModal()">Cancel</button>
-                <button type="submit" [disabled]="addUserForm.invalid">Create User</button>
-            </div>
-        </form>
-    </div>
-</div>
+        <div class="button-group">
+            <button type="button" class="btn-secondary" (click)="closeAddUserModal()">Cancel</button>
+            <button type="submit" [disabled]="addUserForm.invalid">Create User</button>
+        </div>
+    </form>
+</app-modal>

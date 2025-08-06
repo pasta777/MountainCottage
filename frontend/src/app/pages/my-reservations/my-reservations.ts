@@ -1,16 +1,19 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Reservation } from '../../services/reservation';
 import { Review } from '../../services/review';
+import { Modal } from '../../shared/modal/modal';
 
 @Component({
   selector: 'app-my-reservations',
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, Modal],
   templateUrl: './my-reservations.html',
   styleUrl: './my-reservations.css'
 })
 export class MyReservations implements OnInit {
+  @ViewChild(Modal) reviewModal!: Modal;
+
   currentReservations: any[] = [];
   reservationsArchive: any[] = [];
 
@@ -57,6 +60,11 @@ export class MyReservations implements OnInit {
   openFormForReview(reservation: any): void {
     this.reservationForReview = reservation;
     this.formForReview.reset({rating: 5, comment: ''});
+    this.reviewModal.open();
+  }
+
+  closeFormForReview(): void {
+    this.reviewModal.close();
   }
 
   onSendReview(): void {
@@ -75,6 +83,7 @@ export class MyReservations implements OnInit {
         this.reservationsArchive[index].isReviewed = true;
       }
       this.reservationForReview = null;
+      this.closeFormForReview();
     });
   }
 

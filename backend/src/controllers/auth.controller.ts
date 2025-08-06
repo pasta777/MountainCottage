@@ -2,6 +2,7 @@ import { Request, Response } from 'express'
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import User from '../models/user.model';
+import { passwordRegex } from '../utils/constants';
 
 export const register = async (req: Request, res: Response) => {
     try {
@@ -107,8 +108,6 @@ export const changePassword = async (req: any, res: Response) => {
         if(oldPassword === newPassword) {
             return res.status(400).json({message: "New password cannot be the same as the old one."});
         }
-        
-        const passwordRegex = /^(?=.*[A-Z])(?=(?:.*[a-z]){3})(?=.*\d)(?=.*[\W_]).{6,10}$/;
     
         if(!passwordRegex.test(newPassword)) {
             return res.status(400).json({message: "New password doesn't meet required conditions."});

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { Auth } from '../../services/auth';
 import { CommonModule } from '@angular/common';
+import { passwordRegex } from '../../validators/regex.validator';
 
 export const passwordMatchValidator: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
   const password = control.get('newPassword');
@@ -28,8 +29,6 @@ export class ChangePassword implements OnInit {
   constructor(private fb: FormBuilder, private authService: Auth) {}
 
   ngOnInit(): void {
-    const passwordRegex = /^(?=.*[A-Z])(?=(?:.*[a-z]){3})(?=.*\d)(?=.*[\W_]).{6,10}$/;
-
     this.changePasswordForm = this.fb.group({
       oldPassword: ['', Validators.required],
       newPassword: ['', Validators.required, Validators.pattern(passwordRegex)],

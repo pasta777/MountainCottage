@@ -1,40 +1,10 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, AbstractControl, ValidationErrors, AsyncValidatorFn } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Auth } from '../../services/auth';
 import { createPictureDimensionValidator } from '../../validators/image.validator';
-
-export function luhnValidator(control: AbstractControl): ValidationErrors | null {
-  let cardNumber = control.value as string;
-  if(!cardNumber) {
-    return null;
-  }
-
-  cardNumber = cardNumber.replace(/\s/g, '');
-
-  let sum = 0;
-  let shouldDouble = false;
-
-  for(let i = cardNumber.length - 1; i >= 0; i--) {
-    let digit = parseInt(cardNumber.charAt(i), 10);
-
-    if(shouldDouble) {
-      digit *= 2;
-      if(digit > 9) {
-        digit -= 9;
-      }
-    }
-
-    sum += digit;
-    shouldDouble = !shouldDouble;
-  }
-
-  if(sum % 10 === 0) {
-    return null;
-  } else {
-    return {luhnInvalid: true};
-  }
-}
+import { passwordRegex } from '../../validators/regex.validator';
+import { luhnValidator } from '../../validators/luhn.validator';
 
 @Component({
   selector: 'app-register',
@@ -55,8 +25,6 @@ export class Register implements OnInit {
   constructor(private fb: FormBuilder, private authService: Auth) {}
 
   ngOnInit(): void {
-    const passwordRegex = /^(?=.*[A-Z])(?=(?:.*[a-z]){3})(?=.*\d)(?=.*[\W_]).{6,10}$/;
-
     this.registerForm = this.fb.group({
       name: ['', Validators.required],
       surname: ['', Validators.required],
