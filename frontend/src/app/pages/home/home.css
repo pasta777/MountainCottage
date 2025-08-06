@@ -1,0 +1,50 @@
+h1 {
+    color: white;
+    font-size: 4rem;
+    padding: 2rem;
+}
+
+#home {
+    background-image: url('/assets/pictures/mountain-cottage-1.jpg');
+    background-size: cover;
+    background-position: center;
+    position: relative;
+}
+
+#home::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.91);
+    z-index: 0;
+}
+
+#home h1, .stats-grid {
+    position: relative;
+    z-index: 1;
+}
+
+.stats-grid {
+    color: white;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: center;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.stat-card {
+    text-align: center;
+    font-weight: bold;
+    padding: 12px;
+    margin: 15px;
+    width: 20%;
+}
+
+.stat-card h3 {
+    font-size: 2rem;
+}

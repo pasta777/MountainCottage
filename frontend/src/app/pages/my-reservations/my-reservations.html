@@ -5,7 +5,7 @@
         <h2>Current Reservations</h2>
         <div *ngIf="currentReservations.length === 0"><p>You have no current reservations.</p></div>
         <table *ngIf="currentReservations.length > 0">
-            <<thead>
+            <thead>
                 <tr>
                     <th>Cottage</th>
                     <th>Period</th>
@@ -22,7 +22,7 @@
                         <button *ngIf="res.status !== 'canceled' && canCancel(res)" (click)="onCancel(res._id)">Cancel</button>
                     </td>
                 </tr>
-            </tbody>>
+            </tbody>
         </table>
     </section>
 

@@ -1,31 +1,35 @@
 <div class="home-container">
-    <h1>Welcome to Mountain Cottage!</h1>
-    <section class="stats-grid">
-        <div class="stat-card">
-            <h3>{{ stats.allCottages }}</h3>
-            <p>Cottages</p>
-        </div>
-        <div class="stat-card">
-            <h3>{{ stats.allOwners }}</h3>
-            <p>Registered owners</p>
-        </div>
-        <div class="stat-card">
-            <h3>{{ stats.allTourists }}</h3>
-            <p>Registered tourists</p>
-        </div>
-        <div class="stat-card">
-            <h3>{{ stats.reservations24h }}</h3>
-            <p>Reservations in last 24h</p>
-        </div>
-        <div class="stat-card">
-            <h3>{{ stats.reservations7d }}</h3>
-            <p>Reservations in last week</p>
-        </div>
-        <div class="stat-card">
-            <h3>{{ stats.reservations30d }}</h3>
-            <p>Reservations in last month</p>
-        </div>
-    </section>
+    <div id="home">
+        <h1>Welcome to Mountain Cottage!</h1>
+        <section class="stats-grid">
+            <div class="stat-card">
+                <h3>{{ stats.allCottages }}</h3>
+                <p>Cottages</p>
+            </div>
+            <div class="stat-card">
+                <h3>{{ stats.allOwners }}</h3>
+                <p>Registered owners</p>
+            </div>
+            <div class="stat-card">
+                <h3>{{ stats.allTourists }}</h3>
+                <p>Registered tourists</p>
+            </div>
+        </section>
+        <section class="stats-grid">
+            <div class="stat-card">
+                <h3>{{ stats.reservations24h }}</h3>
+                <p>Reservations in last 24h</p>
+            </div>
+            <div class="stat-card">
+                <h3>{{ stats.reservations7d }}</h3>
+                <p>Reservations in last week</p>
+            </div>
+            <div class="stat-card">
+                <h3>{{ stats.reservations30d }}</h3>
+                <p>Reservations in last month</p>
+            </div>
+        </section>
+    </div>
 
     <section class="cottage-section">
         <h2>Find your ideal cottage!</h2>
