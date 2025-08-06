@@ -64,7 +64,7 @@ export const login = async (req: Request, res: Response) => {
 
         const token = jwt.sign(
             {id: user._id, username: user.username, userType: user.userType},
-            'SUPER_SECRET_KEY',
+            process.env.SECRET_KEY as string,
             {expiresIn: '3h'}
         );
 
