@@ -30,6 +30,13 @@ img, picture, video, canvas, svg {
 
 button, input, select, textarea {
     font: inherit;
+    background: 0;
+    background-color: white;
+    border: 0;
+}
+
+button:focus, input:focus {
+    outline: 0;
 }
 
 h1 {

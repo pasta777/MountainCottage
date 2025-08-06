@@ -56,7 +56,7 @@ export class Auth {
   private setLogoutTimer(token: string) {
     try {
       const decodedToken: any = jwtDecode(token);
-      const expirationDuration = (decodedToken * 1000) - new Date().getTime();
+      const expirationDuration = (decodedToken.exp * 1000) - new Date().getTime();
 
       this.tokenExpirationTimer = setTimeout(() => {
         console.log("Token expired. Logging out...");
