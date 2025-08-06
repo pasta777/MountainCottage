@@ -4,7 +4,7 @@
         <p>{{ cottage.location }} | Phone: {{ cottage.phoneNumber }}</p>
     </section>
 
-    <section class="gallery">
+    <section *ngIf="cottage && cottage.pictures && cottage.pictures.length > 0" class="gallery">
         <h2>Gallery</h2>
         <div class="picture-grid">
             <img *ngFor="let picture of cottage.pictures" [src]="'http://localhost:3000/' + picture" [alt]="cottage.name">
