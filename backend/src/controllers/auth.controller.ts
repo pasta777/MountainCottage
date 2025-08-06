@@ -54,7 +54,7 @@ export const login = async (req: Request, res: Response) => {
         }
 
         if(user.status !== 'active') {
-            return res.status(403).json({message: "The account is awaiting approval from admin."});
+            return res.status(403).json({message: "The account is awaiting approval from admin or is deactivated."});
         }
 
         const isPasswordCorrect = await bcrypt.compare(password, user.password);
