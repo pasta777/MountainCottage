@@ -18,6 +18,21 @@ export const getUsers = async (req: any, res: Response) => {
     }
 };
 
+export const getUserById = async (req: any, res: Response) => {
+    if(req.userData.userType !== 'administrator') {
+        return res.status(403).json({message: "The access is allowed only for admins."});
+    }
+    try {
+        const user = await User.findById(req.params.id);
+        if(!user) {
+            return res.status(404).json({message: "User not found."});
+        }
+        res.json(user);
+    } catch(error) {
+        res.status(500).json({message: "Server error."});
+    }
+};
+
 export const getRegistrationRequests = async (req: any, res: Response) => {
     if(req.userData.userType !== 'administrator') {
         return res.status(403).json({message: "The access is allowed only for admins."});

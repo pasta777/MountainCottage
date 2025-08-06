@@ -26,6 +26,10 @@ export class Admin {
     return this.http.get<any[]>(`${this.apiUrl}/users`);
   }
 
+  getUserById(userId: string): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/users/${userId}`);
+  }
+
   toggleUserStatus(userId: string): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/users/${userId}/toggle-status`, {});
   }

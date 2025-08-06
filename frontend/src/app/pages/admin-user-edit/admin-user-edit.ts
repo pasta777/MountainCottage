@@ -31,7 +31,14 @@ export class AdminUserEdit implements OnInit {
 
     this.userId = this.route.snapshot.paramMap.get('id');
     if(this.userId) {
-
+      this.adminService.getUserById(this.userId).subscribe(user => {
+        this.editForm.patchValue({
+          name: user.name,
+          surname: user.surname,
+          address: user.address,
+          phoneNumber: user.phoneNumber
+        });
+      });
     }
   }
 

@@ -5,6 +5,7 @@ import { checkAuth } from "../middleware/auth.middleware";
 const router = Router();
 
 router.get('/users', checkAuth, adminController.getUsers);
+router.get('/users/:id', checkAuth, adminController.getUserById);
 router.get('/registration-requests', checkAuth, adminController.getRegistrationRequests);
 router.get('/cottages', checkAuth, adminController.getCottages);
 router.put('/users/:id', checkAuth, adminController.updateUser);
