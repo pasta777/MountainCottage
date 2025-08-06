@@ -40,13 +40,22 @@ export const createReservation = async (req: any, res: Response) => {
         }
     
         const data = req.body;
+
+        const startDateWithTime = new Date(data.startDate);
+        startDateWithTime.setHours(14, 0, 0, 0);
+
+        const endDateWithTime = new Date(data.endDate);
+        endDateWithTime.setHours(10, 0, 0, 0);
+
+        if(startDateWithTime >= endDateWithTime) {
+            return res.status(400).json({message: "End date must be after start date."});
+        }
     
         const overlappingReservations = await Reservation.find({
             cottageId: data.cottageId,
             status: {$in: ['approved', 'unresolved']},
-            $or: [
-                {startDate: {$lt: data.endDate}, endDate: {$gt: data.startDate}}
-            ]
+            startDate: {$lt: endDateWithTime},
+            endDate: {$gt: endDateWithTime}
         });
     
         if(overlappingReservations.length > 0) {
@@ -56,6 +65,8 @@ export const createReservation = async (req: any, res: Response) => {
         const newReservation = new Reservation({
             ...data,
             touristId: req.userData.id,
+            startDate: startDateWithTime,
+            endDate: endDateWithTime,
             status: 'unresolved'
         });
     

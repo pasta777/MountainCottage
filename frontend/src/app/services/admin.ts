@@ -38,6 +38,10 @@ export class Admin {
     return this.http.delete<any>(`${this.apiUrl}/users/${userId}`);
   }
 
+  createUser(userData: any): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/users`, userData);
+  }
+
   updateUser(userId: string, userData: any): Observable<any> {
     return this.http.put<any>(`${this.apiUrl}/users/${userId}`, userData);
   }

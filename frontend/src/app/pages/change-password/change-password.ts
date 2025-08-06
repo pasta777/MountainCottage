@@ -1,7 +1,18 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { Auth } from '../../services/auth';
 import { CommonModule } from '@angular/common';
+
+export const passwordMatchValidator: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
+  const password = control.get('newPassword');
+  const confirmPassword = control.get('confirmPassword');
+
+  if(password && confirmPassword && password.value !== confirmPassword.value) {
+    return {passwordMissmatch: true};
+  }
+
+  return null;
+}
 
 @Component({
   selector: 'app-change-password',
@@ -17,14 +28,19 @@ export class ChangePassword implements OnInit {
   constructor(private fb: FormBuilder, private authService: Auth) {}
 
   ngOnInit(): void {
+    const passwordRegex = /^(?=.*[A-Z])(?=(?:.*[a-z]){3})(?=.*\d)(?=.*[\W_]).{6,10}$/;
+
     this.changePasswordForm = this.fb.group({
       oldPassword: ['', Validators.required],
-      newPassword: ['', Validators.required]
-    });
+      newPassword: ['', Validators.required, Validators.pattern(passwordRegex)],
+      confirmPassword: ['', Validators.required]
+    }, {validators: passwordMatchValidator});
   }
 
   onSubmit(): void {
+    this.errorMessage = null;
     if(this.changePasswordForm.invalid) {
+      this.changePasswordForm.markAllAsTouched();
       return;
     }
 

@@ -5,6 +5,7 @@ import Reservation from '../models/reservation.model';
 import Review from '../models/review.model';
 import path from "path";
 import fs from "fs";
+import bcrypt from 'bcrypt'
 
 export const getUsers = async (req: any, res: Response) => {
     if(req.userData.userType !== 'administrator') {
@@ -68,6 +69,41 @@ export const getCottages = async (req: any, res: Response) => {
         }
 
         res.json(cottagesWithStatus);
+    } catch(error) {
+        res.status(500).json({message: "Server error."});
+    }
+};
+
+export const createUser = async (req: any, res: Response) => {
+    if(req.userData.userType !== 'administrator') {
+        return res.status(403).json({message: "The access is allowed only for admins."});
+    }
+    try {
+        const { username, email, password, ...otherData } = req.body;
+
+        const existingUser = await User.findOne({username: username});
+        if(existingUser) {
+            return res.status(409).json({message: "Username already exists."});
+        }
+
+        const existingEmail = await User.findOne({email: email});
+        if(existingEmail) {
+            return res.status(409).json({message: "Email already exists."});
+        }
+
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        const newUser = new User({
+            ...otherData,
+            username,
+            email,
+            password: hashedPassword,
+            profilePicture: 'uploads/default.png',
+            status: 'active'
+        });
+
+        await newUser.save();
+        res.status(201).json(newUser);
     } catch(error) {
         res.status(500).json({message: "Server error."});
     }
@@ -142,7 +178,7 @@ export const rejectRequest = async (req: any, res: Response) => {
         return res.status(403).json({message: "The access is allowed only for admins."});
     }
     try {
-        const user = await User.findByIdAndDelete(req.params.userId);
+        const user = await User.findByIdAndUpdate(req.params.userId, {status: 'rejected'}, {new: true});
         if(!user) {
             return res.status(404).json({message: "User not found"});
         }

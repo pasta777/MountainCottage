@@ -163,8 +163,14 @@ export class CottageDetails implements OnInit {
     const end = new Date(this.reservationForm.value.endDate);
     const numOfNights = (end.getTime() - start.getTime()) / (1000 * 3600 * 24);
 
-    if (numOfNights > 0) {
-      this.fullPrice = this.cottage.tariff.summer * numOfNights;
+    if (numOfNights > 0 && this.cottage) {
+      const startMonth = start.getMonth();
+
+      const isWinter = startMonth >= 9 || startMonth <= 2;
+
+      const pricePerNight = isWinter ? this.cottage.tariff.winter : this.cottage.tariff.summer;
+
+      this.fullPrice = pricePerNight * numOfNights;
     } else {
       this.fullPrice = 0;
     }

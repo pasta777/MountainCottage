@@ -103,6 +103,10 @@ export const adminLogin = async (req: Request, res: Response) => {
 export const changePassword = async (req: any, res: Response) => {
     try {
         const {oldPassword, newPassword} = req.body;
+
+        if(oldPassword === newPassword) {
+            return res.status(400).json({message: "New password cannot be the same as the old one."});
+        }
         
         const passwordRegex = /^(?=.*[A-Z])(?=(?:.*[a-z]){3})(?=.*\d)(?=.*[\W_]).{6,10}$/;
     

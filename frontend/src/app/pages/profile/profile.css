@@ -55,3 +55,25 @@ input[type="file"] {
 input[type="file"]:hover {
     border-color: var(--primary-color);
 }
+
+.button-group {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+    align-items: center;
+}
+
+.change-password-btn {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    background-color: var(--secondary-color);
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    text-align: center;
+    transition: background-color 0.3s ease;
+}
+
+.change-password-btn:hover {
+    background-color: #2a1042;
+}
