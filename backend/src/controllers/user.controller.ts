@@ -24,6 +24,17 @@ export const updateUser = async (req: any, res: Response) => {
             return res.status(404).json({message: "User not found."});
         }
 
+        const email = updateData.email;
+
+        if(email) {
+            if(user.email !== email) {
+                const existingEmail = await User.findOne({email: email, _id: {$ne: user._id}});
+                if(existingEmail) {
+                    return res.status(409).json({message: "Email already exists."});
+                }
+            }
+        }
+
         if(req.file) {
             if(user.profilePicture && user.profilePicture !== 'uploads/default.png') {
                 const oldPicturePath = path.join(__dirname, '..', user.profilePicture);

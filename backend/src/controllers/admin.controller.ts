@@ -114,6 +114,19 @@ export const updateUser = async (req: any, res: Response) => {
         return res.status(403).json({message: "The access is allowed only for admins."});
     }
     try {
+        const { username, email } = req.body;
+        const userId = req.params.id;
+
+        const existingUser = await User.findOne({username: username, _id: {$ne: userId}});
+        if(existingUser) {
+            return res.status(409).json({message: "Username already exists."});
+        }
+
+        const existingEmail = await User.findOne({email: email, _id: {$ne: userId}});
+        if(existingEmail) {
+            return res.status(409).json({message: "Email already exists."});
+        }
+        
         const updatedUser = await User.findByIdAndUpdate(req.params.id, req.body, {new: true});
         res.json(updatedUser);
     } catch(error) {
