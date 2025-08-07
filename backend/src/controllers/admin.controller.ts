@@ -12,7 +12,7 @@ export const getUsers = async (req: any, res: Response) => {
         return res.status(403).json({message: "The access is allowed only for admins."});
     }
     try {
-        const users = await User.find({userType: {$ne: 'administrator'}});
+        const users = await User.find({userType: {$ne: 'administrator'}, status: {$ne: 'waiting_for_approval'}});
         res.json(users);
     } catch(error) {
         res.status(500).json({message: "Server error."});

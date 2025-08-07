@@ -15,7 +15,7 @@
             </thead>
             <tbody>
                 <tr *ngFor="let res of currentReservations">
-                    <td><a [routerLink]="['/cottage', res.cottageId]">{{ res.cottageId.name }}</a> ({{ res.cottageId.location }})</td>
+                    <td><a [routerLink]="['/cottage', res.cottageId._id]">{{ res.cottageId.name }}</a> ({{ res.cottageId.location }})</td>
                     <td>{{ res.startDate | date: 'dd.MM.yyyy' }} - {{ res.endDate | date: 'dd.MM.yyyy' }}</td>
                     <td>{{ res.status }}</td>
                     <td>
@@ -42,12 +42,12 @@
             </thead>
             <tbody>
                 <tr *ngFor="let res of reservationsArchive">
-                    <td><a [routerLink]="['/cottage', res.cottageId]">{{ res.cottageId.name }}</a> ({{ res.cottageId.location }})</td>
+                    <td><a [routerLink]="['/cottage', res.cottageId._id]">{{ res.cottageId.name }}</a> ({{ res.cottageId.location }})</td>
                     <td>{{ res.startDate | date: 'dd.MM.yyyy' }} - {{ res.endDate | date: 'dd.MM.yyyy' }}</td>
                     <td>{{ res.status }}</td>
                     <td>
-                        <div class="btn-group">
-                            <button class="btn btn-primary" *ngIf="res.status === 'approved' || isPastDate(res.startDate) && !res.isReviewed" (click)="openFormForReview(res)">Post a Review</button>
+                        <div class="btn-group" *ngIf="res.status === 'approved' && isPastDate(res.startDate) && !res.isReviewed">
+                            <button class="btn btn-primary" (click)="openFormForReview(res)">Post a Review</button>
                         </div>
                         <span *ngIf="res.isReviewed">Reviewed</span>
                     </td>
@@ -74,7 +74,7 @@
             <textarea formControlName="comment" rows="4"></textarea>
         </div>
         <div class="btn-group">
-            <button class="btn btn-special" type="button" (click)="reservationForReview = null">Back</button>
+            <button class="btn btn-special" type="button" (click)="reservationForReview = null; closeFormForReview()">Back</button>
             <button class="btn btn-primary" type="submit" [disabled]="formForReview.invalid">Send</button>
         </div>
     </form>
