@@ -3,42 +3,31 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Auth } from '../../services/auth';
 import { Router } from '@angular/router';
+import { LoginForm } from '../../shared/login-form/login-form';
 
 @Component({
   selector: 'app-login',
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, LoginForm],
   templateUrl: './login.html',
   styleUrl: './login.css'
 })
-export class Login implements OnInit {
-  loginForm!: FormGroup;
+export class Login {
   loginError: string | null = null;
 
   constructor(
-    private fb: FormBuilder,
     private authService: Auth,
     private router: Router
   ) {}
 
-  ngOnInit(): void {
-    this.loginForm = this.fb.group({
-      username: ['', Validators.required],
-      password: ['', Validators.required]
-    });
-  }
-
-  onSubmit(): void {
-    if(this.loginForm.invalid) {
-      return;
-    }
+  handleLogin(credentials: any): void {
     this.loginError = null;
-    this.authService.login(this.loginForm.value).subscribe({
+    this.authService.login(credentials).subscribe({
       next: (response) => {
         this.router.navigate(['/profile']);
       },
       error: (err) => {
-        this.loginError = err.error.message || 'Log in failed. Check the credentials.'
+        this.loginError = err.error.message || "Login failed. Check the credentials.";
       }
-    })
+    });
   }
 }

@@ -1,70 +1,17 @@
 <div class="profile-container">
     <h2>My Profile</h2>
-    <form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
-        <div class="profile-header">
-            <img [src]="currentProfilePictureUrl" alt="Profile Picture" class="profile-picture">
-            <div class="form-group">
-                <label for="profilePicture">Change Profile Picture</label>
-                <input type="file" id="profilePicture" (change)="onFileSelected($event)">
+    <app-user-form
+        *ngIf="user"
+        [user]="user"
+        [isProfilePage]="true"
+        (formSubmit)="onProfileUpdate($event)">
+    </app-user-form>
 
-                <div *ngIf="profileForm.get('profilePicture')?.errors && profileForm.get('profilePicture')?.touched" class="error">
-                    <small *ngIf="profileForm.get('profilePicture')?.errors?.['pictureType']">
-                        Only JPG and PNG formats are allowed.
-                    </small>
-                    <small *ngIf="profileForm.get('profilePicture')?.errors?.['minDimensions']">
-                        Picture is too small. Minimum dimensions are 100x100px.
-                    </small>
-                    <small *ngIf="profileForm.get('profilePicture')?.errors?.['maxDimensions']">
-                        Picture is too big. Maximum dimensions are 300x300px.
-                    </small>
-                    <small *ngIf="profileForm.get('profilePicture')?.errors?.['invalidPicture']">
-                        The choosen file is invalid.
-                    </small>
-                </div>
-                <div *ngIf="profileForm.get('profilePictre')?.pending">
-                    <small>Checking the picture...</small>
-                </div>
-            </div>
-        </div>
+    <div class="button-group">
+        <a routerLink="/change-password" class="btn-secondary">Change Password</a>
+    </div>
 
-        <div class="form-row">
-            <div class="form-group">
-                <label for="name">Name</label>
-                <input type="text" id="name" formControlName="name">
-            </div>
-            <div class="form-group">
-                <label for="surname">Prezime</label>
-                <input type="text" id="surname" formControlName="surname">
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label for="email">Email</label>
-            <input type="text" id="email" formControlName="email">
-        </div>
-
-        <div class="form-group">
-            <label for="address">Address</label>
-            <input type="text" id="address" formControlName="address">
-        </div>
-
-        <div class="form-group">
-            <label for="phoneNumber">Phone Number</label>
-            <input type="text" id="phoneNumber" formControlName="phoneNumber">
-        </div>
-
-        <div class="form-group">
-            <label for="creditCardNumber">Credit Card Number</label>
-            <input type="text" id="creditCardNumber" formControlName="creditCardNumber" readonly>
-        </div>
-
-        <div class="button-group">
-            <button type="submit" [disabled]="profileForm.invalid">Save Changes</button>
-            <a routerLink="/change-password" class="change-password-btn">Change Password</a>
-        </div>
-
-        <div *ngIf="successMessage" class="success-message">
-            {{ successMessage }}
-        </div>
-    </form>
+    <div *ngIf="successMessage" class="success-message">
+        {{ successMessage }}
+    </div>
 </div>

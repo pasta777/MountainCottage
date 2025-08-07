@@ -6,10 +6,11 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { passwordRegex } from '../../validators/regex.validator';
 import { luhnValidator } from '../../validators/luhn.validator';
 import { Modal } from '../../shared/modal/modal';
+import { UserForm } from '../../shared/user-form/user-form';
 
 @Component({
   selector: 'app-admin-users-management',
-  imports: [CommonModule, RouterLink, ReactiveFormsModule, Modal],
+  imports: [CommonModule, RouterLink, ReactiveFormsModule, Modal, UserForm],
   templateUrl: './admin-users-management.html',
   styleUrl: './admin-users-management.css'
 })
@@ -19,23 +20,10 @@ export class AdminUsersManagement implements OnInit {
   users: any[] = [];
   addUserForm!: FormGroup;
 
-  constructor(private adminService: Admin, private fb: FormBuilder) {}
+  constructor(private adminService: Admin) {}
 
   ngOnInit(): void {
     this.loadUsers();
-
-    this.addUserForm = this.fb.group({
-      name: ['', Validators.required],
-      surname: ['', Validators.required],
-      username: ['', Validators.required, Validators.minLength(3)],
-      password: ['', Validators.required, Validators.pattern(passwordRegex)],
-      address: ['', Validators.required],
-      phoneNumber: ['', Validators.required],
-      email: ['', Validators.required, Validators.email, luhnValidator],
-      creditCardNumber: ['', Validators.required],
-      gender: ['M', Validators.required],
-      userType: ['tourist', Validators.required]
-    });
   }
 
   loadUsers(): void {
@@ -45,7 +33,6 @@ export class AdminUsersManagement implements OnInit {
   }
 
   openAddUserModal(): void {
-    this.addUserForm.reset({gender: 'M', userType: 'tourist'});
     this.addUserModal.open();
   }
 
@@ -54,21 +41,9 @@ export class AdminUsersManagement implements OnInit {
   }
 
   onAddNewUser(): void {
-    if(this.addUserForm.invalid) {
-      this.addUserForm.markAllAsTouched();
-      return;
-    }
-
-    this.adminService.createUser(this.addUserForm.value).subscribe({
-        next: () => {
-          alert("User successfully created!");
-          this.loadUsers();
-          this.closeAddUserModal();
-        },
-        error: (err) => {
-          alert(err.error.message || "An error has occured.");
-        }
-    });
+    alert("User successfully created!");
+    this.loadUsers();
+    this.closeAddUserModal();
   }
 
   onToggleStatus(id: string): void {
