@@ -5,6 +5,7 @@ import { User } from '../../services/user';
 import { createPictureDimensionValidator } from '../../validators/image.validator';
 import { Subscription } from 'rxjs';
 import { RouterLink } from '@angular/router';
+import { luhnValidator } from '../../validators/luhn.validator';
 
 @Component({
   selector: 'app-profile',
@@ -28,8 +29,8 @@ export class Profile implements OnInit {
       surname: ['', Validators.required],
       address: ['', Validators.required],
       phoneNumber: ['', Validators.required],
-      email: [{value: '', disabled: true}],
-      creditCardNumber: [''],
+      email: ['', [Validators.required, Validators.email]],
+      creditCardNumber: ['', [Validators.required, luhnValidator]],
       profilePicture: [
         null,
         [],

@@ -98,4 +98,17 @@ export class Auth {
   isAdminLoggedIn(): boolean {
     return this.getAdminToken() !== null;
   }
+
+  getUserRole(): string | null {
+    const token = this.getActiveToken();
+    if(!token) {
+      return null;
+    }
+    try {
+      const decodedToken: any = jwtDecode(token);
+      return decodedToken.userType;
+    } catch(error) {
+      return null;
+    }
+  }
 }

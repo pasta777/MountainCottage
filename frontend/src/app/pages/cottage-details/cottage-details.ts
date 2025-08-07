@@ -67,7 +67,7 @@ export class CottageDetails implements OnInit {
   }
 
   ngOnInit(): void {
-    this.checkUserRole();
+    this.isTourist = this.authService.getUserRole() === 'tourist';
 
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
@@ -92,21 +92,6 @@ export class CottageDetails implements OnInit {
       this.userService.getProfile().subscribe(user => {
         this.reservationForm.patchValue({ cardNumber: user.creditCardNumber });
       });
-    }
-  }
-
-  checkUserRole(): void {
-    const token = this.authService.getActiveToken();
-    if(token) {
-      try {
-        const decodedToken: any = jwtDecode(token);
-        if(decodedToken.userType === 'tourist') {
-          this.isTourist = true;
-        }
-      } catch(error) {
-        console.error("Error decoding token.", error);
-        this.isTourist = false;
-      }
     }
   }
 
