@@ -49,25 +49,19 @@ export class UserForm implements OnInit, OnChanges {
       name: ['', Validators.required],
       surname: ['', Validators.required],
       username: [{value: '', disabled: this.isProfilePage}, [Validators.required, Validators.minLength(3)]],
-      password: ['', [Validators.required, Validators.pattern(passwordRegex)]],
+      password: ['', this.isProfilePage ? [] : [Validators.required, Validators.pattern(passwordRegex)]],
       address: ['', Validators.required],
       phoneNumber: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       creditCardNumber: ['', [Validators.required, Validators.minLength(15), Validators.maxLength(16), luhnValidator]],
-      gender: ['M', Validators.required],
-      userType: ['tourist', Validators.required],
+      gender: ['M', this.isProfilePage ? [] : [Validators.required]],
+      userType: ['tourist', this.isProfilePage ? [] : [Validators.required]],
       profilePicture: [null, [], [createPictureDimensionValidator(100, 100, 300, 300)]],
     }); 
   }
 
   private patchFormValues(): void {
-    const userToPatch = { ...this.user };
-
-    if(!this.isProfilePage) {
-      delete userToPatch.password;
-    }
-
-    this.userForm.patchValue(userToPatch);
+    this.userForm.patchValue(this.user);
     if(this.user.profilePicture) {
       this.profilePicturePreview = `http://localhost:3000/${this.user.profilePicture}`;
     }
@@ -130,12 +124,22 @@ export class UserForm implements OnInit, OnChanges {
       this.userForm.markAllAsTouched();
       return;
     }
+
     const formData = new FormData();
-    Object.keys(this.userForm.value).forEach(key => {
-      if(key !== 'profilePicture') {
-        formData.append(key, this.userForm.get(key)?.value);
-      }
-    });
+
+    if(this.isProfilePage) {
+      formData.append('name', this.userForm.get('name')?.value);
+      formData.append('surname', this.userForm.get('surname')?.value);
+      formData.append('address', this.userForm.get('address')?.value);
+      formData.append('email', this.userForm.get('email')?.value);
+      formData.append('phoneNumber', this.userForm.get('phoneNumber')?.value);
+    } else {
+      Object.keys(this.userForm.value).forEach(key => {
+        if(key !== 'profilePicture') {
+          formData.append(key, this.userForm.get(key)?.value);
+        }
+      });
+    }
 
     if(this.selectedFile) {
       formData.append('profilePicture', this.selectedFile, this.selectedFile.name);
@@ -143,6 +147,4 @@ export class UserForm implements OnInit, OnChanges {
 
     this.formSubmit.emit(formData);
   }
-
-
 }
