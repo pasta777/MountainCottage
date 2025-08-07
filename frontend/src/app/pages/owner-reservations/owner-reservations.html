@@ -19,8 +19,10 @@
                 <td>{{ res.touristId.name }} {{ res.touristId.surname }}</td>
                 <td>{{ res.startDate | date: 'dd.MM.yyyy' }} - {{ res.endDate | date: 'dd.MM.yyyy' }}</td>
                 <td>
-                    <button class="approve-btn" (click)="onApprove(res._id)">Approve</button>
-                    <button class="deny-btn" (click)="openDenyModal(res)">Deny</button>
+                    <div class="btn-group">
+                        <button class="btn btn-success" (click)="onApprove(res._id)">Approve</button>
+                        <button class="btn btn-danger" (click)="openDenyModal(res)">Deny</button>
+                    </div>
                 </td>
             </tbody>
         </table>
@@ -44,17 +46,17 @@
                     <label for="denyComment">Reason for denial:</label>
                     <textarea id="denyComment" formControlName="denyComment" rows="3" class="form-control"></textarea>
                 </div>
-                <div class="button-group">
-                    <button type="button" class="btn-secondary" (click)="closeModal()">Cancel</button>
-                    <button type="submit" class="deny-btn" [disabled]="denyForm.invalid">Confirm Denial</button>
+                <div class="btn-group">
+                    <button type="button" class="btn btn-secondary" (click)="closeModal()">Cancel</button>
+                    <button type="submit" class="btn btn-danger" [disabled]="denyForm.invalid">Confirm Denial</button>
                 </div>
             </form>
         </div>
 
-        <div *ngIf="!showDenyForm" class="button-group">
-            <button type="button" class="btn-secondary" (click)="closeModal()">Close</button>
-            <button class="approve-btn" (click)="onApprove(selectedReservation._id)">Approve</button>
-            <button class="deny-btn" (click)="showDenyForm = true">Deny</button>
+        <div *ngIf="!showDenyForm" class="btn-group">
+            <button type="button" class="btn btn-secondary" (click)="closeModal()">Close</button>
+            <button class="btn btn-success" (click)="onApprove(selectedReservation._id)">Approve</button>
+            <button class="btn btn-danger" (click)="showDenyForm = true">Deny</button>
         </div>
     </div>
 </app-modal>

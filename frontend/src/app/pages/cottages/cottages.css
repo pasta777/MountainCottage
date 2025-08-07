@@ -1,10 +1,4 @@
-.container {
-    max-width: 1000px;
-}
-
 .container h1 {
-    color: var(--primary-color);
-    font-size: 2.5rem;
     margin-bottom: 0.5rem;
 }
 
@@ -12,39 +6,6 @@
     text-align: center;
     color: #666;
     margin-bottom: 2rem;
-}
-
-.search-form {
-    display: flex;
-    gap: 1rem;
-    justify-content: center;
-    margin-bottom: 2.5rem;
-    background-color: #fdfdfd;
-    padding: 1.5rem;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-}
-
-.search-form input {
-    width: 350px;
-}
-
-table {
-    box-shadow: none;
-}
-
-thead th {
-    font-size: 1.1rem;
-}
-
-tbody tr a {
-    color: var(--primary-color);
-    text-decoration: none;
-    font-weight: bold;
-}
-
-tbody tr a:hover {
-    text-decoration: underline;
 }
 
 .rating {
@@ -55,10 +16,10 @@ tbody tr a:hover {
 
 .numeric-rating {
     font-weight: bold;
-    color: #f0ad4e;
+    color: var(--warning-color);
 }
 
 .star {
-    color: #f0ad4e;
+    color: var(--warning-color);
     font-size: 1.2rem;
 }

@@ -62,9 +62,10 @@
             <label for="pictures">Pictures (limited to 10)</label>
             <input type="file" id="pictures" (change)="onFileSelected($event)" multiple>
         </div>
-
-        <button type="submit" [disabled]="cottageForm.invalid">
-            {{ editMode ? 'Save Changes' : 'Add Cottage' }}
-        </button>
+        <div class="btn-group">
+            <button class="btn btn-primary" type="submit" [disabled]="cottageForm.invalid">
+                {{ editMode ? 'Save Changes' : 'Add Cottage' }}
+            </button>
+        </div>
     </form>
 </div>

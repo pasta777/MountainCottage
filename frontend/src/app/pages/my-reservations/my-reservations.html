@@ -15,11 +15,13 @@
             </thead>
             <tbody>
                 <tr *ngFor="let res of currentReservations">
-                    <td>{{ res.cottageId.name }} ({{ res.cottageId.location }})</td>
+                    <td><a [routerLink]="['/cottage', res.cottageId]">{{ res.cottageId.name }}</a> ({{ res.cottageId.location }})</td>
                     <td>{{ res.startDate | date: 'dd.MM.yyyy' }} - {{ res.endDate | date: 'dd.MM.yyyy' }}</td>
                     <td>{{ res.status }}</td>
                     <td>
-                        <button *ngIf="res.status !== 'canceled' && canCancel(res)" (click)="onCancel(res._id)">Cancel</button>
+                        <div class="btn-group">
+                            <button class="btn btn-danger" *ngIf="res.status !== 'canceled' && canCancel(res)" (click)="onCancel(res._id)">Cancel</button>
+                        </div>
                     </td>
                 </tr>
             </tbody>
@@ -40,11 +42,13 @@
             </thead>
             <tbody>
                 <tr *ngFor="let res of reservationsArchive">
-                    <td>{{ res.cottageId.name }} ({{ res.cottageId.location }})</td>
+                    <td><a [routerLink]="['/cottage', res.cottageId]">{{ res.cottageId.name }}</a> ({{ res.cottageId.location }})</td>
                     <td>{{ res.startDate | date: 'dd.MM.yyyy' }} - {{ res.endDate | date: 'dd.MM.yyyy' }}</td>
                     <td>{{ res.status }}</td>
                     <td>
-                        <button *ngIf="res.status === 'approved' || isPastDate(res.startDate) && !res.isReviewed" (click)="openFormForReview(res)">Post a Review</button>
+                        <div class="btn-group">
+                            <button class="btn btn-primary" *ngIf="res.status === 'approved' || isPastDate(res.startDate) && !res.isReviewed" (click)="openFormForReview(res)">Post a Review</button>
+                        </div>
                         <span *ngIf="res.isReviewed">Reviewed</span>
                     </td>
                 </tr>
@@ -69,9 +73,9 @@
             <label>Comment</label>
             <textarea formControlName="comment" rows="4"></textarea>
         </div>
-        <div class="button-group">
-            <button type="button" (click)="reservationForReview = null">Back</button>
-            <button type="submit" [disabled]="formForReview.invalid">Send</button>
+        <div class="btn-group">
+            <button class="btn btn-special" type="button" (click)="reservationForReview = null">Back</button>
+            <button class="btn btn-primary" type="submit" [disabled]="formForReview.invalid">Send</button>
         </div>
     </form>
 </app-modal>

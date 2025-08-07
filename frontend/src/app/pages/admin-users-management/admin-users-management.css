@@ -6,42 +6,5 @@
 }
 
 .header-actions h1 {
-    font-size: 2.5rem;
-    color: var(--primary-color);
-    text-align: center;
-    margin-bottom: 2.5rem;
+    margin-bottom: 0;
 }    
-
-.inactive {
-    background-color: #f8d7da;
-    color: #721c24;
-}
-
-.problematic {
-    background-color: #fff3cd;
-}
-
-td button {
-    margin-right: 0.5rem;
-}
-
-.button-group {
-    display: flex;
-    justify-content: flex-end;
-    gap: 1rem;
-    margin-top: 1.5rem;
-}
-
-.btn-secondary {
-    background-color: #6c757d;
-}
-
-.btn-secondary:hover {
-    background-color: #5a6268;
-}
-
-.error-message {
-    color: #dc3545;
-    font-size: 0.875rem;
-    margin-top: 0.25rem;
-}

@@ -1,7 +1,7 @@
 <div class="container">
     <div class="header-actions">
         <h1>Users Management</h1>
-        <button (click)="openAddUserModal()">+ Add New User</button>
+        <button (click)="openAddUserModal()" class="btn btn-primary">+ Add New User</button>
     </div>
 
     <table>
@@ -16,18 +16,20 @@
             </tr>
         </thead>
         <tbody>
-            <tr *ngFor="let u of users" [ngClass]="{'inactive': u.status === 'inactive'}">
+            <tr *ngFor="let u of users" [class.inactive-row]="u.status === 'inactive'">
                 <td>{{ u.name }} {{ u.surname }}</td>
                 <td>{{ u.username }}</td>
                 <td>{{ u.email }}</td>
                 <td>{{ u.userType }}</td>
                 <td>{{ u.status }}</td>
                 <td>
-                    <button class="edit-btn" [routerLink]="['/admin/users/edit', u._id]">Modify</button>
-                    <button (click)="onToggleStatus(u._id)">
-                        {{ u.status === 'active' ? 'Deactivate' : 'Activate' }}
-                    </button>
-                    <button class="delete-btn" (click)="onDelete(u._id)">Delete</button>
+                    <div class="btn-group">
+                        <button class="btn btn-warning" [routerLink]="['/admin/users/edit', u._id]">Modify</button>
+                        <button (click)="onToggleStatus(u._id)" class="btn">
+                            {{ u.status === 'active' ? 'Deactivate' : 'Activate' }}
+                        </button>
+                        <button class="btn btn-danger" (click)="onDelete(u._id)">Delete</button>
+                    </div>
                 </td>
             </tr>
         </tbody>

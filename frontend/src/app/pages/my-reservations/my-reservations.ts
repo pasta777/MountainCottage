@@ -4,10 +4,11 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { Reservation } from '../../services/reservation';
 import { Review } from '../../services/review';
 import { Modal } from '../../shared/modal/modal';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-my-reservations',
-  imports: [CommonModule, ReactiveFormsModule, Modal],
+  imports: [CommonModule, ReactiveFormsModule, Modal, RouterLink],
   templateUrl: './my-reservations.html',
   styleUrl: './my-reservations.css'
 })

@@ -23,7 +23,9 @@
                     <span *ngIf="!isBlocked(c)">Active</span>
                 </td>
                 <td>
-                    <button *ngIf="c.haveToColor && !isBlocked(c)" (click)="onBlock(c._id)">Block (48h)</button>
+                    <div class="btn-group">
+                        <button class="btn btn-warning" *ngIf="c.haveToColor && !isBlocked(c)" (click)="onBlock(c._id)">Block (48h)</button>
+                    </div>
                 </td>
             </tr>
         </tbody>

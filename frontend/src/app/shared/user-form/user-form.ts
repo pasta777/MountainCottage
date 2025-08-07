@@ -63,7 +63,9 @@ export class UserForm implements OnInit, OnChanges {
   private patchFormValues(): void {
     const userToPatch = { ...this.user };
 
-    delete userToPatch.password;
+    if(!this.isProfilePage) {
+      delete userToPatch.password;
+    }
 
     this.userForm.patchValue(userToPatch);
     if(this.user.profilePicture) {

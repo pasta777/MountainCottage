@@ -1,10 +1,3 @@
-.container h1 {
-    text-align: center;
-    color: var(--primary-color);
-    font-size: 2.5rem;
-    margin-bottom: 3rem;
-}
-
 .bar-chart-section,
 .pie-chart-section {
     margin-top: 3rem;
@@ -12,13 +5,6 @@
     background-color: white;
     border-radius: 8px;
     box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-}
-
-section h2 {
-    text-align: center;
-    font-size: 1.8rem;
-    color: var(--secondary-color);
-    margin-bottom: 2rem;
 }
 
 .pie-chart-grid {
@@ -35,13 +21,6 @@ section h2 {
 .pie-chart-container h3 {
     color: var(--primary-color);
     margin-bottom: 1rem;
-}
-
-p {
-    text-align: center;
-    color: #666;
-    font-size: 1.1rem;
-    padding: 2rem;
 }
 
 :host ::ng-deep .ngx-charts .legend-title-text {

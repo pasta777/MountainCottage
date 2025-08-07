@@ -1,11 +1,4 @@
-.container h2 {
-    text-align: center;
-    color: var(--primary-color);
-    font-size: 2.5rem;
-    margin-bottom: 2rem;
-}
-
-.container > button {
+.container > .add-cottage-btn {
     display: block;
     margin: 0 auto 2.5rem auto;
     padding: 0.8rem 2rem;
@@ -15,12 +8,12 @@
 .cottages-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1));
-    gap: 1.5rem;
+    gap: var(--spacing-large);
 }
 
 .cottage-card {
-    background-color: white;
-    padding: 1.5rem;
+    background-color: var(--surface-color);
+    padding: var(--spacing-large);
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     flex-direction: column;
@@ -34,7 +27,6 @@
 }
 
 .cottage-card a {
-    margin-top: 0;
     color: var(--primary-color);
     text-decoration: none;
     font-weight: bold;
@@ -50,12 +42,7 @@
 
 .cottage-card p {
     color: #666;
-    margin-bottom: 1.5rem;
-}
-
-.cottage-card div {
-    display: flex;
-    gap: 0.5rem;
+    margin: var(--spacing-small) 0 var(--spacing-large) 0;
 }
 
 .no-cottages-message {
@@ -63,7 +50,7 @@
     margin-top: 4rem;
     padding: 2rem;
     background-color: #f9f9f9;
-    border-radius: 8px;
+    border-radius: var(--border-radius);
     color: #666;
     font-size: 1.1rem;
 }

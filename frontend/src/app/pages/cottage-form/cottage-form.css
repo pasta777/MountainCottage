@@ -2,13 +2,6 @@
     max-width: 800px;
 }
 
-.container h2 {
-    text-align: center;
-    color: var(--primary-color);
-    font-size: 2.5rem;
-    margin-bottom: 2.5rem;
-}
-
 .json-upload {
     background-color: #f8f9fa;
     border: 1px dashed var(--primary-color);
@@ -27,25 +20,6 @@
     display: block;
     margin-top: 0.5rem;
     color: #6c757d;
-}
-
-input[type="file"] {
-    margin-top: 0.5rem;
-    display: block;
-    width: 100%;
-}
-
-form {
-    margin-top: 2rem;
-}
-
-.form-row {
-    display: flex;
-    gap: 1.5rem;
-}
-
-.form-row .form-group {
-    flex: 1;
 }
 
 .existing-pictures {
@@ -94,11 +68,4 @@ form {
 
 .delete-pic-btn:hover {
     background-color: #dc3545;
-}
-
-button[type="submit"] {
-    width: 100%;
-    padding: 1rem;
-    font-size: 1.1rem;
-    margin-top: 1.5rem;
 }

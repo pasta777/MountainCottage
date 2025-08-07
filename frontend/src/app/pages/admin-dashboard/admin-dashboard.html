@@ -1,7 +1,7 @@
-<div class="dashboard-container">
+<div class="container">
     <h2>New Requests for Registration</h2>
 
-    <div *ngIf="requests.length === 0">
+    <div *ngIf="requests.length === 0" class="no-requests-message">
         <p>There are no requests at the moment.</p>
     </div>
 
@@ -22,8 +22,10 @@
                 <td>{{ req.email }}</td>
                 <td>{{ req.userType }}</td>
                 <td>
-                    <button class="approve-btn" (click)="onApprove(req._id)">Approve</button>
-                    <button class="reject-btn" (click)="onReject(req._id)">Reject</button>
+                    <div class="btn-group">
+                        <button class="btn btn-success" (click)="onApprove(req._id)">Approve</button>
+                        <button class="btn btn-danger" (click)="onReject(req._id)">Reject</button>
+                    </div>
                 </td>
             </tr>
         </tbody>

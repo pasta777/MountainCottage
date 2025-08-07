@@ -1,32 +1,8 @@
-.dashboard-container {
-    max-width: 1000px;
-    margin: 2rem auto;
-    padding: 2rem;
-    background-color: white;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-}
-
-.dashboard-container h2 {
-    text-align: center;
-    color: var(--primary-color);
-    font-size: 2.5rem;
-    margin-bottom: 2.5rem;
-}
-
-div p {
+.no-requests-message {
     text-align: center;
     color: #666;
     font-size: 1.1rem;
     padding: 2rem;
     background-color: #f9f9f9;
-    border-radius: 8px;
-}
-
-table .approve-btn,
-table .reject-btn {
-    padding: 0.5rem 1rem;
-    font-size: 0.9rem;
-    margin-right: 0.5rem;
-    color: white;
+    border-radius: var(--border-radius);
 }

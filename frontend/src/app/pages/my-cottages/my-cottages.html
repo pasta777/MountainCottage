@@ -1,14 +1,14 @@
 <div class="container">
     <h2>My Cottages</h2>
-    <button routerLink="/add-cottage">Add New Cottage</button>
+    <button class="btn btn-primary add-cottage-btn" routerLink="/add-cottage">Add New Cottage</button>
 
     <div *ngIf="myCottages.length > 0; else noCottages" class="cottages-grid">
         <div *ngFor="let c of myCottages" class="cottage-card">
             <a [routerLink]="['/cottage', c._id]">{{ c.name }}</a>
             <p>{{ c.location }}</p>
-            <div>
-                <button [routerLink]="['/modify-cottage', c._id]">Modify</button>
-                <button (click)="onDelete(c._id)">Delete</button>
+            <div class="btn-group">
+                <button class="btn btn-warning" [routerLink]="['/modify-cottage', c._id]">Modify</button>
+                <button class="btn btn-danger" (click)="onDelete(c._id)">Delete</button>
             </div>
         </div>
     </div>

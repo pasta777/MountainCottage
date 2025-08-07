@@ -1,7 +1,7 @@
 .main-header {
     background-color: var(--primary-color);
     color: white;
-    padding: 0 1.5rem;
+    padding: 0 var(--spacing-large);
     box-shadow: 0 2px 5px rgba(0,0,0,0.2);
     position: sticky;
     top: 0;
@@ -9,7 +9,7 @@
 }
 
 .main-nav {
-    max-width: var(--MXW);
+    max-width: var(--max-width);
     margin: 0 auto;
     display: flex;
     justify-content: space-between;
@@ -26,22 +26,21 @@
 
 .main-nav ul {
     list-style: none;
-    margin: 0;
-    padding: 0;
     display: flex;
-    gap: 0.5rem;
+    gap: var(--spacing-small);
 }
 
 .main-nav ul li a {
     display: block;
-    padding: 0.75rem 1rem;
+    padding: 0.75rem var(--spacing-medium);
     color: white;
     text-decoration: none;
-    border-radius: 4px;
+    border-radius: var(--border-radius);
     transition: background-color 0.3s ease;
 }
 
-.main-nav ul li a:hover, .main-nav ul li a.active-link {
+.main-nav ul li a:hover,
+.main-nav ul li a.active-link {
     background-color: rgba(255,255,255,0.15);
 }
 
@@ -49,11 +48,39 @@
     background-color: var(--special-color);
     color: white;
     text-align: center;
-    padding: 2rem 1rem;
+    padding: 2rem var(--spacing-medium);
     margin-top: 2rem;
 }
 
 .main-footer p {
-    margin: 0;
     font-size: 0.9rem;
+}
+
+.search-form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: var(--spacing-medium);
+    padding: var(--spacing-large);
+    background-color: var(--surface-color);
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+}
+
+.search-form input {
+    width: 300px;
+    border: 1px solid var(--border-color);
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.search-form input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(22, 87, 55, 0.1);
+}
+
+.search-form .btn {
+    padding: 0.75rem 2rem;
 }

@@ -1,4 +1,4 @@
-<div *ngIf="cottage" class="details-container">
+<div *ngIf="cottage" class="container">
     <section class="headers">
         <h1>{{ cottage.name }}</h1>
         <p>{{ cottage.location }} | Phone: {{ cottage.phoneNumber }}</p>
@@ -55,7 +55,9 @@
                                 <input type="number" formControlName="children">
                             </div>
                         </div>
-                        <button (click)="nextStep()" [disabled]="!reservationForm.get('startDate')?.valid || !reservationForm.get('endDate')?.valid">Next</button>
+                        <div class="btn-group">
+                            <button class="btn btn-primary" (click)="nextStep()" [disabled]="!reservationForm.get('startDate')?.valid || !reservationForm.get('endDate')?.valid">Next</button>
+                        </div>
                     </div>
                     
                     <div *ngIf="currentStep === 2">
