@@ -13,7 +13,6 @@ export class OwnerStats implements OnInit {
   barChartData: any[] = [];
   pieChartData: any[] = [];
 
-  view: [number, number] = [700, 400];
   gradient = true;
   showLegend = true;
 

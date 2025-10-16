@@ -68,7 +68,7 @@
     display: flex;
     justify-content: space-between;
     margin-top: var(--spacing-large);
-}   
+}
 
 .map-container {
     height: 400px;
@@ -106,10 +106,31 @@
 
 @media (max-width: 992px) {
     .main-content {
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr !important;
     }
 
     .booking-form {
         position: static;
+        margin-top: 2rem;
+    }
+
+    .gallery, .info-column, .comments {
+        padding: 1rem;
+    }
+
+    .info-section {
+        padding: 1rem 0;
+    }
+
+    .picture-grid {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    }
+
+    .headers {
+        padding: 1.5rem;
+    }
+
+    .headers h1 {
+        font-size: 2rem;
     }
 }

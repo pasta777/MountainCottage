@@ -2,30 +2,36 @@
   <nav class="main-nav">
     <a class="logo" routerLink="/">{{ title }}</a>
 
-    <ul *ngIf="!authService.isLoggedIn() && !authService.isAdminLoggedIn()">
-      <li><a routerLink="/login" routerLinkActive="active-link">Login</a></li>
-      <li><a routerLink="/register" routerLinkActive="active-link">Register</a></li>
+    <button class="burger-menu" (click)="toggleMenu()">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+
+    <ul *ngIf="!authService.isLoggedIn() && !authService.isAdminLoggedIn()" [class.show-menu]="isMenuOpen">
+      <li><a routerLink="/login" routerLinkActive="active-link" (click)="isMenuOpen = false">Login</a></li>
+      <li><a routerLink="/register" routerLinkActive="active-link" (click)="isMenuOpen = false">Register</a></li>
     </ul>
 
-    <ul *ngIf="authService.isLoggedIn() && getUserRole() === 'tourist'">
-      <li><a routerLink="/profile" routerLinkActive="active-link">Profile</a></li>
-      <li><a routerLink="/cottages" routerLinkActive="active-link">Cottages</a></li>
-      <li><a routerLink="/my-reservations" routerLinkActive="active-link">My Reservations</a></li>
+    <ul *ngIf="authService.isLoggedIn() && getUserRole() === 'tourist'" [class.show-menu]="isMenuOpen">
+      <li><a routerLink="/profile" routerLinkActive="active-link" (click)="isMenuOpen = false">Profile</a></li>
+      <li><a routerLink="/cottages" routerLinkActive="active-link" (click)="isMenuOpen = false">Cottages</a></li>
+      <li><a routerLink="/my-reservations" routerLinkActive="active-link" (click)="isMenuOpen = false">My Reservations</a></li>
       <li><a (click)="logout()" style="cursor: pointer;">Logout</a></li>
     </ul>
 
-    <ul *ngIf="authService.isLoggedIn() && getUserRole() === 'owner'">
-      <li><a routerLink="/profile" routerLinkActive="active-link">Profile</a></li>
-      <li><a routerLink="/my-cottages" routerLinkActive="active-link">My Cottages</a></li>
-      <li><a routerLink="/owner/reservations" routerLinkActive="active-link">Reservations</a></li>
-      <li><a routerLink="/owner/stats" routerLinkActive="active-link">Stats</a></li>
+    <ul *ngIf="authService.isLoggedIn() && getUserRole() === 'owner'" [class.show-menu]="isMenuOpen">
+      <li><a routerLink="/profile" routerLinkActive="active-link" (click)="isMenuOpen = false">Profile</a></li>
+      <li><a routerLink="/my-cottages" routerLinkActive="active-link" (click)="isMenuOpen = false">My Cottages</a></li>
+      <li><a routerLink="/owner/reservations" routerLinkActive="active-link" (click)="isMenuOpen = false">Reservations</a></li>
+      <li><a routerLink="/owner/stats" routerLinkActive="active-link" (click)="isMenuOpen = false">Stats</a></li>
       <li><a (click)="logout()" style="cursor: pointer;">Logout</a></li>
     </ul>
 
-    <ul *ngIf="authService.isAdminLoggedIn()">
-      <li><a routerLink="/admin/dashboard" routerLinkActive="active-link">Requests</a></li>
-      <li><a routerLink="/admin/users" routerLinkActive="active-link">Users</a></li>
-      <li><a routerLink="/admin/cottages" routerLinkActive="active-link">Cottages</a></li>
+    <ul *ngIf="authService.isAdminLoggedIn()" [class.show-menu]="isMenuOpen">
+      <li><a routerLink="/admin/dashboard" routerLinkActive="active-link" (click)="isMenuOpen = false">Requests</a></li>
+      <li><a routerLink="/admin/users" routerLinkActive="active-link" (click)="isMenuOpen = false">Users</a></li>
+      <li><a routerLink="/admin/cottages" routerLinkActive="active-link" (click)="isMenuOpen = false">Cottages</a></li>
       <li><a (click)="logout()" style="cursor: pointer;">Logout</a></li>
     </ul>
   </nav>

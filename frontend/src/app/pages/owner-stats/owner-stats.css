@@ -1,15 +1,17 @@
 .bar-chart-section,
 .pie-chart-section {
     margin-top: 3rem;
-    padding: 2rem;
+    padding: 1rem; /* Smanjen padding za mobilne uređaje */
     background-color: white;
     border-radius: 8px;
     box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    overflow-x: auto; /* Dodato da omogući horizontalno skrolovanje ako je potrebno */
 }
 
 .pie-chart-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(400px, 1));
+    /* Prilagođeno za manje ekrane */
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 2rem;
     justify-items: center;
 }
@@ -25,4 +27,12 @@
 
 :host ::ng-deep .ngx-charts .legend-title-text {
     font-weight: bold !important;
+}
+
+/* Media query za veće ekrane */
+@media (min-width: 768px) {
+    .bar-chart-section,
+    .pie-chart-section {
+        padding: 2rem; /* Vraćen veći padding za desktop */
+    }
 }

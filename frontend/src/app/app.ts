@@ -12,9 +12,14 @@ import { jwtDecode } from 'jwt-decode';
 })
 export class App {
   title = 'Mountain Cottage';
+  isMenuOpen = false;
 
   constructor(public authService: Auth, private router: Router) {
     this.authService.autoLogin();
+  }
+
+  toggleMenu(): void {
+    this.isMenuOpen = !this.isMenuOpen;
   }
 
   getUserRole(): string | null {
@@ -32,5 +37,6 @@ export class App {
 
   logout(): void {
     this.authService.logout();
+    this.isMenuOpen = false;
   }
 }

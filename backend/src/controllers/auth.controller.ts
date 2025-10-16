@@ -78,8 +78,6 @@ export const login = async (req: Request, res: Response) => {
 export const adminLogin = async (req: Request, res: Response) => {
     try {
         const { username, password } = req.body;
-
-        console.log(username, password);
         
         const admin = await User.findOne({ username: username, userType: 'administrator' });
         if(!admin) {

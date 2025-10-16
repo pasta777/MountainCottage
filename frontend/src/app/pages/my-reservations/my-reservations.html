@@ -1,6 +1,6 @@
 <div class="container">
     <h1>My Reservations</h1>
-    
+
     <section>
         <h2>Current Reservations</h2>
         <div *ngIf="currentReservations.length === 0"><p>You have no current reservations.</p></div>
@@ -15,7 +15,7 @@
             </thead>
             <tbody>
                 <tr *ngFor="let res of currentReservations">
-                    <td><a [routerLink]="['/cottage', res.cottageId]">{{ res.cottageId.name }}</a> ({{ res.cottageId.location }})</td>
+                    <td><a [routerLink]="['/cottage', res.cottageId._id]">{{ res.cottageId.name }}</a> ({{ res.cottageId.location }})</td>
                     <td>{{ res.startDate | date: 'dd.MM.yyyy' }} - {{ res.endDate | date: 'dd.MM.yyyy' }}</td>
                     <td>{{ res.status }}</td>
                     <td>
@@ -42,12 +42,12 @@
             </thead>
             <tbody>
                 <tr *ngFor="let res of reservationsArchive">
-                    <td><a [routerLink]="['/cottage', res.cottageId]">{{ res.cottageId.name }}</a> ({{ res.cottageId.location }})</td>
+                    <td><a [routerLink]="['/cottage', res.cottageId._id]">{{ res.cottageId.name }}</a> ({{ res.cottageId.location }})</td>
                     <td>{{ res.startDate | date: 'dd.MM.yyyy' }} - {{ res.endDate | date: 'dd.MM.yyyy' }}</td>
                     <td>{{ res.status }}</td>
                     <td>
                         <div class="btn-group">
-                            <button class="btn btn-primary" *ngIf="res.status === 'approved' || isPastDate(res.startDate) && !res.isReviewed" (click)="openFormForReview(res)">Post a Review</button>
+                            <button class="btn btn-primary" *ngIf="res.status === 'approved' && isPastDate(res.endDate) && !res.isReviewed" (click)="openFormForReview(res)">Post a Review</button>
                         </div>
                         <span *ngIf="res.isReviewed">Reviewed</span>
                     </td>
@@ -57,7 +57,7 @@
     </section>
 </div>
 
-<app-modal [title]="'Leave a Review'"> 
+<app-modal [title]="'Leave a Review'">
     <form [formGroup]="formForReview" (ngSubmit)="onSendReview()">
         <div class="form-group">
             <label>Rating (1-5)</label>

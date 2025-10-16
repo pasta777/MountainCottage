@@ -35,7 +35,11 @@
 
 :host ::ng-deep .fc-col-header-cell {
     background-color: var(--primary-color);
-}   
+}
+
+:host ::ng-deep .fc-col-header-cell-cushion {
+  color: white !important;
+}
 
 :host ::ng-deep .fc-col-header-cell:hover {
     background-color: var(--primary-color-hover);
