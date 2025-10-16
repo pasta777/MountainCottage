@@ -8,6 +8,10 @@ export function luhnValidator(control: AbstractControl): ValidationErrors | null
   }
 
   cardNumber = cardNumber.replace(/\s/g, '');
+  
+  if(cardNumber.length < 15 || cardNumber.length > 16) {
+    return {luhnInvalid: true};
+  }
 
   let sum = 0;
   let shouldDouble = false;

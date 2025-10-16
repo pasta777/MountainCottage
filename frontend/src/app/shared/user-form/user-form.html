@@ -53,8 +53,7 @@
         </div>
         <div *ngIf="userForm.get('creditCardNumber')?.errors && userForm.get('creditCardNumber')?.touched" class="error-message">
             <small *ngIf="userForm.get('creditCardNumber')?.errors?.['required']">Credit card number is required.</small>
-            <small *ngIf="userForm.get('creditCardNumber')?.errors?.['luhnInvalid']">The credit card number is invalid</small>
-            <small>Credit card number is too small or too large</small>
+            <small *ngIf="userForm.get('creditCardNumber')?.errors?.['luhnInvalid']">The credit card number is invalid.</small>
         </div>
     </div>
     <div class="form-row" *ngIf="!isProfilePage">
@@ -76,7 +75,7 @@
 
     <div class="btn-group">
         <button type="submit" [disabled]="userForm.invalid" class="btn btn-primary">
-            {{ isProfilePage ? 'Save Changes' : (editMode ? 'Update User' : 'Submit') }}
+            {{ isProfilePage ? 'Save Changes' : (editMode ? 'Update' : 'Register') }}
         </button>
     </div>
 </form>

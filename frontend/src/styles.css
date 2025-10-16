@@ -256,7 +256,7 @@ tbody tr a:hover {
     color: var(--inactive-color);
 }
 
-.error-message .success-message {
+.error-message, .success-message {
     text-align: center;
     padding: var(--spacing-medium);
     border-radius: var(--border-radius);

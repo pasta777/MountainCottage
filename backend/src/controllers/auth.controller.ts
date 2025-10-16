@@ -78,12 +78,14 @@ export const login = async (req: Request, res: Response) => {
 export const adminLogin = async (req: Request, res: Response) => {
     try {
         const { username, password } = req.body;
+
+        console.log(username, password);
         
         const admin = await User.findOne({ username: username, userType: 'administrator' });
         if(!admin) {
-            return res.status(401).json({message: "Incorrect credentials"});
+            return res.status(404).json({message: "Incorrect credentials"});
         }
-    
+
         const isPasswordCorrect = await bcrypt.compare(password, admin.password);
         if(!isPasswordCorrect) {
             return res.status(401).json({message: "Incorrect credentials"});
@@ -97,6 +99,7 @@ export const adminLogin = async (req: Request, res: Response) => {
     
         res.status(200).json({token: token});
     } catch(error) {
+        console.error(error);
         res.status(500).json({message: "Server error."});
     }
 };
