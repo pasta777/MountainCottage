@@ -114,7 +114,7 @@ const seedDatabase = async () => {
      for (const tourist of tourists) {
         for (let i = 0; i < 2; i++) {
             const cottage = faker.helpers.arrayElement(cottages);
-            const startDate = faker.date.between({ from: '2023-01-01', to: '2024-12-31' });
+            const startDate = faker.date.between({ from: '2025-01-01', to: '2025-12-31' });
             const endDate = new Date(startDate);
             endDate.setDate(startDate.getDate() + faker.number.int({ min: 2, max: 10 }));
 
